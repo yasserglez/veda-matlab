@@ -1,4 +1,4 @@
-function run_eda(parameters)
+function run(parameters)
   % Run an Estimation of Distribution Algorithm.
   %
   % PARAMETERS is a struct that defines the parameters of the Estimation of
