@@ -48,9 +48,11 @@ function run(parameters)
               
         % Execute the verbose method. Verbose methods are used to print
         % information about the evolution of the population.
-        feval(params.verbose, params, population, evaluation, ...
-              selected_population, selected_evaluation, ...
-              sampled_population, sampled_evaluation);              
+        if ~params.quiet
+          feval(params.verbose, params, population, evaluation, ...
+                selected_population, selected_evaluation, ...
+                sampled_population, sampled_evaluation);
+        end
       end
       
       population = sampled_population;
