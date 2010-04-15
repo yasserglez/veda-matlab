@@ -4,6 +4,8 @@ function run(parameters)
   % PARAMETERS is a struct that defines the parameters of the Estimation of
   % Distribution Algorithm. See the parameters directory for an example.
 
+  % Created by Yasser González Fernández (2010).
+
   init_environment();
   params = feval(parameters);
    
@@ -78,7 +80,8 @@ function run(parameters)
       
       % Execute the learning method. Learning methods returns a probabilistic
       % model that its used to sample the population in the next generation.
-      model = feval(params.learning, selected_population, selected_evaluation);
+      model = feval(params.learning, params, selected_population, ...
+                    selected_evaluation);
       
       if ~params.quiet
         % Execute a verbose method. Verbose methods are used to print (or

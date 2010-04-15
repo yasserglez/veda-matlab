@@ -7,6 +7,8 @@ function [population] = seeding_uniform(params)
   % variable. The population is returned in the form of a matrix with each
   % variable as a column and rows for indiviluals. The number of individuals in
   % the population is given by PARAMS.seeding_params.population_size.
+  
+  % Created by Yasser González Fernández (2010).  
 
   lowers = repmat(params.objective_params.variable_bounds(1,:), ...
                   params.seeding_params.population_size, 1);

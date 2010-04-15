@@ -12,6 +12,8 @@ function [terminate] = ...
   % objective function. The error tolerance is given by
   % PARAMS.termination_params.error_tolerance.
   
+  % Created by Yasser González Fernández (2010).  
+  
   error = abs(params.objective_params.optimum - evaluation);
   terminate = any(error <= params.termination_params.error_tolerance);
 end

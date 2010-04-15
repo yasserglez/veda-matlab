@@ -10,5 +10,7 @@ function [terminate] = ...
   % the evolution. It will be true when GENERATION is greater or equals than the
   % number set in PARAMS.termination_params.max_generations.
   
+  % Created by Yasser González Fernández (2010).  
+  
   terminate = (generation >= params.termination_params.max_generations);
 end

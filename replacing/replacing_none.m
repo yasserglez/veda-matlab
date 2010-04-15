@@ -13,6 +13,8 @@ function [population, evaluation] = ...
   % The output variable POPULATION is the population that the algorithm should
   % use for this generation and EVALUATION the evaluation of each solution in
   % this population.
+  
+  % Created by Yasser González Fernández (2010).  
 
   population = current_population;
   evaluation = current_evaluation;

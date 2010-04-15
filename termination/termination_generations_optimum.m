@@ -11,6 +11,8 @@ function [terminate] = ...
   % or termination_generations is satisfied. See the documentation of this
   % functions for more information.
   
+  % Created by Yasser González Fernández (2010).  
+  
   terminate = termination_generations(params, generation, population, evaluation);
   if ~terminate
     terminate = termination_optimum(params, generation, population, evaluation);

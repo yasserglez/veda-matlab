@@ -1,16 +1,16 @@
-function y = empirical_cdf(sample, x)
+function [y] = empirical_cdf(sample, x)
   % Evaluate an univariate empirical cumulative distribution function.
   %
   % Calculates the empirical CDF from the column vector SAMPLE and returns in
   % the output variable Y its evaluation on each element of the column vector X.
   %
-  % Created by Raúl José Arderí García (2007). Modified by Yasser González
-  % Fernández (2010).
-  %
   % See the following for more information:
   %
   % R. de Matteis. Fitting copulas to data. Diploma Thesis, Institute of
   % Mathematics of the University of Zurich, 2001.
+  
+  % Created by Raúl José Arderí García (2007).
+  % Modified by Yasser González Fernández (2010).
   
   sample = sort(sample);
   n = size(sample, 1);
