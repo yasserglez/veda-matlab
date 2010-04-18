@@ -7,14 +7,17 @@ function [params] = parameters_cvine_ml()
 
   params.objective = 'objective_sphere';
   params.objective_params = struct();
-  params.objective_params.number_variables = 10;
-  params.objective_params.variable_bounds = repmat([-10; 10], 1, 10);
+  params.objective_params.number_variables = 2;
+  params.objective_params.variable_bounds = repmat([-10; 10], 1, 2);
   params.objective_params.optimum = 0;
   
   % LEARNING A CANONICAL VINE BY MAXIMUM LIKELIHOOD.
   
   params.learning = 'learning_cvine_ml';
-  params.learning_params = struct();  
+  params.learning_params = struct();
+  
+  % Uniformly select a random ordering of the variables.
+  params.learning_params.random_ordering = false;
   
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
@@ -40,19 +43,19 @@ function [params] = parameters_cvine_ml()
 
   params.seeding = 'seeding_uniform';  
   params.seeding_params = struct();
-  params.seeding_params.population_size = 25;
+  params.seeding_params.population_size = 100;
   
   params.replacing = 'replacing_none';
   params.replacing_params = struct();
   
   params.termination = 'termination_generations_optimum';
   params.termination_params = struct();
-  params.termination_params.max_generations = 10;
+  params.termination_params.max_generations = 25;
   params.termination_params.error_tolerance = 5e-7;
   
   params.selection = 'selection_truncation';
   params.selection_params = struct();
-  params.selection_params.truncation_coefficient = 0.5;
+  params.selection_params.truncation_coefficient = 0.3;
 
   params.verbose = 'verbose_none';
   params.verbose_params = struct();

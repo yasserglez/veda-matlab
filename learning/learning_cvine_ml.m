@@ -22,7 +22,11 @@ function [model] = learning_cvine_ml(params, population, evaluation)
   num_vars = size(population, 2);
   
   % Select an ordering of the variables.
-  ordering = 1:num_vars;
+  if params.learning_params.random_ordering
+    ordering = randperm(num_vars);
+  else
+    ordering = 1:num_vars;
+  end
   
   % Transform the population into an Uniform(0,1) population applying the
   % univariate marginal CDFs to each observation of each variable in the
