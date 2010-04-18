@@ -1,5 +1,5 @@
 function [results] = h_gaussian(u1, u2, rho)
-  % Evaluate the h-function for the bivariate Gaussian copula.
+  % Evaluate the h-function of the bivariate Gaussian copula.
   %
   % See the following for more information:
   %

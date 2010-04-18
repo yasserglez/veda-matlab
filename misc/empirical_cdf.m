@@ -1,8 +1,8 @@
-function [y] = empirical_cdf(sample, x)
-  % Evaluate an univariate empirical cumulative distribution function.
+function [u] = empirical_cdf(sample, x)
+  % Univariate empirical cumulative distribution function.
   %
   % Calculates the empirical CDF from the column vector SAMPLE and returns in
-  % the output variable Y its evaluation on each element of the column vector X.
+  % the output variable U its evaluation on each element of the column vector X.
   %
   % See the following for more information:
   %
@@ -27,18 +27,18 @@ function [y] = empirical_cdf(sample, x)
     z(i + 1) = (sample(i) + sample(i + 1)) / 2;
   end
 
-  y = zeros(size(x, 1), 1);
+  u = zeros(size(x, 1), 1);
   for i = 1:size(x, 1)
     k = 1;
     while (x(i) > z(k)) && (k < (n + 1))
       k = k + 1;
     end
     if k == 1
-      y(i) = 0;
+      u(i) = 0;
     elseif x(i) >= z(n + 1)
-      y(i) = 1;
+      u(i) = 1;
     else
-      y(i) = ((k - 2) / n) + (x(i) - z(k - 1)) / (n * (z(k) - z(k - 1)));
+      u(i) = ((k - 2) / n) + (x(i) - z(k - 1)) / (n * (z(k) - z(k - 1)));
     end
   end
 end

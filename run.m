@@ -59,7 +59,13 @@ function run(parameters)
       end
       
       population = sampled_population;
-      evaluation = sampled_evaluation;      
+      evaluation = sampled_evaluation;
+      
+      % Update the global statistics of the runs.
+      best_gen_fitness = min(evaluation);
+      if isnan(best_fitness(run)) || best_gen_fitness < best_fitness(run)
+        best_fitness(run) = best_gen_fitness;
+      end      
       
       % Evaluate the termination condition. The termination condition is
       % evaluated at this point to avoid applying the selection and learning
@@ -87,12 +93,6 @@ function run(parameters)
         % Execute a verbose method. Verbose methods are used to print (or
         % anything similar) information about the current generation.
       end
-      
-      % Update the global statistics of the runs.
-      best_gen_fitness = min(evaluation);
-      if isnan(best_fitness(run)) || best_gen_fitness < best_fitness(run)
-        best_fitness(run) = best_gen_fitness;
-      end
 
       % Prepare for the next generation.
       previous_population = population;
@@ -110,7 +110,7 @@ function run(parameters)
     num_evaluations(run) = generation * params.seeding_params.population_size;
     if ~isnan(params.objective_params.optimum)
       tolerance = params.termination_params.error_tolerance;
-      if abs(params.objective_params.optimum - best_fitness) <= tolerance
+      if abs(params.objective_params.optimum - best_fitness(run)) <= tolerance
         run_success(run) = true;
       else
         run_success(run) = false;

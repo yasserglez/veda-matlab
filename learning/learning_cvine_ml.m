@@ -7,8 +7,8 @@ function [model] = learning_cvine_ml(params, population, evaluation)
   %
   % A canonical vine is defined by an ordering of the variables and the
   % parameters of each copula density in the factorization. The output variable
-  % MODEL will be an struct with two fields: "ordering" a vector for the order
-  % of the variables and a "parameters" a matrix with the parameters of each
+  % MODEL will be an struct with two fields: "ordering", a vector for the order
+  % of the variables and "parameters", a matrix with the parameters of each
   % copula.
   %
   % See the following for more information:
@@ -18,28 +18,27 @@ function [model] = learning_cvine_ml(params, population, evaluation)
   
   % Created by Yasser González Fernández (2010).  
   
+  num_individuals = size(population, 1);
   num_vars = size(population, 2);
   
   % Select an ordering of the variables.
   ordering = 1:num_vars;
   
-  % Transform the population into a population of the uniform distribution in
-  % [0,1] applying the univariate cdf to each observation of each variable in
-  % the population. This keeps the relationships between the variables. This is
-  % done because the algorithm is more simple if the marginals are considered to
-  % be uniform.
-  uniform_pop = zeros(size(population));
+  % Transform the population into an Uniform(0,1) population applying the
+  % univariate marginal CDFs to each observation of each variable in the
+  % population.
+  uniform_pop = zeros(num_individuals, num_vars);
   marginal_cdf = params.learning_params.marginal_cdf;
   for k = 1:num_vars
-    uniform_pop(:,k) = feval(marginal_cdf, population(:,k), population(:,k));
+    uniform_pop(:,k) = feval(marginal_cdf, population(:,ordering(k)), ...
+                             population(:,ordering(k)));
   end
   
   % Calculate the starting values for the parameters of the copulas needed for
   % the numerical maximisation of the log-likelihood function.
   copula_fit = params.learning_params.copula_fit;
   h_function = params.learning_params.h_function;
-  parameters = cvine_starting_parameters(uniform_pop, ordering, ...
-                                         copula_fit, h_function);
+  parameters = cvine_starting_parameters(uniform_pop, copula_fit, h_function);
   
   % Run a local optimization method for the log-likehood function.
   
@@ -49,35 +48,35 @@ function [model] = learning_cvine_ml(params, population, evaluation)
   model.parameters = parameters;
 end
 
-function parameters = cvine_starting_parameters(uniform_pop, ordering, ...
+function parameters = cvine_starting_parameters(uniform_pop, ...
                                                 copula_fit, h_function)
   % Calculate starting parameters of the copulas in a canonical vine.
   
   % WARNING: The way the first dimension of v is indexed here differs differs
   % from the description in SAMBA/24/06 because of MATLAB 1-based indexing.
   
-  num_observ = size(uniform_pop, 1);
+  num_individuals = size(uniform_pop, 1);
   num_vars = size(uniform_pop, 2);
   
-  v = zeros(num_observ, 1, num_vars, num_vars);
+  v = zeros(num_individuals, 1, num_vars, num_vars);
 
   for i = 1:num_vars
-    v(:,:,1,i) = uniform_pop(:,ordering(i));
+    v(:,:,1,i) = uniform_pop(:,i);
   end
 
-  parameters_allocated = false;
+  allocated = false;
   for j = 1:num_vars - 1
     for i = 1:num_vars - j
       theta = feval(copula_fit, v(:,:,j,1), v(:,:,j,i + 1));
-      if ~parameters_allocated
+      if ~allocated
         % Allocate memory according to the number of parameters of the copula.
         parameters = zeros(1, size(theta, 2), num_vars, num_vars);
-        parameters_allocated = true;
+        allocated = true;
       end
       parameters(:,:,j,i) = theta;
     end
     
-    if j ~= (num_vars - 1)
+    if j ~= num_vars-1
       % Compute observations for the next tree.
       for i = 1:num_vars - j
         v(:,:,j + 1,i) = feval(h_function, v(:,:,j,i + 1), v(:,:,j,1), ...
