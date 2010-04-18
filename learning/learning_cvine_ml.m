@@ -39,7 +39,7 @@ function [model] = learning_cvine_ml(params, population, evaluation)
   end
   
   % Calculate the starting values for the parameters of the copulas needed for
-  % the numerical maximisation of the log-likelihood function.
+  % the numerical maximization of the log-likelihood function.
   copula_fit = params.learning_params.copula_fit;
   h_function = params.learning_params.h_function;
   parameters = cvine_starting_parameters(uniform_pop, copula_fit, h_function);
@@ -56,33 +56,31 @@ function parameters = cvine_starting_parameters(uniform_pop, ...
                                                 copula_fit, h_function)
   % Calculate starting parameters of the copulas in a canonical vine.
   
-  % WARNING: The way the first dimension of v is indexed here differs differs
-  % from the description in SAMBA/24/06 because of MATLAB 1-based indexing.
+  % WARNING: The way the first dimension of v is indexed here differs from the
+  % Algorithm 3 in SAMBA/24/06 because of MATLAB 1-based indexing.
   
-  num_individuals = size(uniform_pop, 1);
-  num_vars = size(uniform_pop, 2);
-  
-  v = zeros(num_individuals, 1, num_vars, num_vars);
+  n = size(uniform_pop, 2);
+  v = zeros(size(uniform_pop, 1), 1, n, n);
 
-  for i = 1:num_vars
+  for i = 1:n
     v(:,:,1,i) = uniform_pop(:,i);
   end
 
   allocated = false;
-  for j = 1:num_vars - 1
-    for i = 1:num_vars - j
+  for j = 1:n - 1
+    for i = 1:n - j
       theta = feval(copula_fit, v(:,:,j,1), v(:,:,j,i + 1));
       if ~allocated
         % Allocate memory according to the number of parameters of the copula.
-        parameters = zeros(1, size(theta, 2), num_vars, num_vars);
+        parameters = zeros(1, size(theta, 2), n, n);
         allocated = true;
       end
       parameters(:,:,j,i) = theta;
     end
     
-    if j ~= num_vars-1
+    if j ~= n-1
       % Compute observations for the next tree.
-      for i = 1:num_vars - j
+      for i = 1:n - j
         v(:,:,j + 1,i) = feval(h_function, v(:,:,j,i + 1), v(:,:,j,1), ...
                                parameters(:,:,j,i));
       end

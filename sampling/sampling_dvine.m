@@ -1,18 +1,18 @@
-function [population] = sampling_cvine(params, model, selected_population, ...
+function [population] = sampling_dvine(params, model, selected_population, ...
                                        selected_evaluation)
-  % Sample a canonical vine learned from a population.
+  % Sample a D-vine learned from a population.
   %
   % PARAMS is a struct with the parameters of the EDA. MODEL is a struct
-  % representing the canonical vine, it should have two fields: "ordering", a
-  % vector for the order of the variables and "parameters", a matrix with 
-  % the parameters of each copula in the pair-copula decomposition.
-  % SELECTED_POPULATION is the population from where the canonical vine was
-  % learned and SELECTED_EVALUATION its evaluation.
+  % representing the D-vine, it should have two fields: "ordering", a vector for
+  % the order of the variables and "parameters", a matrix with  the parameters
+  % of each copula in the pair-copula decomposition. SELECTED_POPULATION is the
+  % population from where the canonical vine was learned and SELECTED_EVALUATION
+  % its evaluation.
   %
   % The output variable POPULATION is the random population sampled from the
-  % canonical vine. The population is returned as a matrix with columns for
-  % variables and rows for indiviluals. The number of individuals in the
-  % population is given by PARAMS.seeding_params.population_size.
+  % D-vine. The population is returned as a matrix with columns for variables
+  % and rows for indiviluals. The number of individuals in the population is
+  % given by PARAMS.seeding_params.population_size.
   %
   % See the following for more information:
   %
@@ -37,22 +37,36 @@ function [population] = sampling_cvine(params, model, selected_population, ...
 
   for individual = 1:num_individuals
     w = W(individual,:);
-    uniform_pop(individual,1) = w(1);
     v(1,1) = w(1);
+    uniform_pop(individual,1) = v(1,1);   
+    v(2,1) = feval(h_inverse, w(2), v(1,1), parameters(:,:,1,1));
+    uniform_pop(individual,2) = v(2,1);
+    v(2,2) = feval(h_function, v(1,1), v(2,1), parameters(:,:,1,1));
     
-    for i = 2:n
+    for i = 3:n
       % Sampling the ith variable.
       v(i,1) = w(i);
-      for k = i-1:-1:1
-        v(i,1) = feval(h_inverse, v(i,1), v(k,k), parameters(:,:,k,i-k));
+      for k = i - 1:-1:2
+        v(i,1) = feval(h_inverse, v(i,1), v(i - 1,2 * k - 2), ...
+                       parameters(:,:,k,i - k));
       end
+      v(i,1) = feval(h_inverse, v(i,1), v(i - 1,1), parameters(:,:,1,i - 1));
       uniform_pop(individual,i) = v(i,1);
       
       % Compute the h-inverse values needed for sampling the (i + 1)th variable.
       if i ~= n
-        for j = 1:i-1
-          v(i,j + 1) = feval(h_function, v(i,j), v(j,j), parameters(:,:,j,i-j));
+        v(i,2) = feval(h_function, v(i - 1,1), v(i,1), parameters(:,:,1,i - 1));
+        v(i,3) = feval(h_function, v(i,1), v(i - 1,1), parameters(:,:,1,i - 1));
+        if i > 3
+          for j = 2:i - 2
+            v(i,2 * j) = feval(h_function, v(i - 1,2 * j - 2), ...
+                               v(i,2 * j - 1), parameters(:,:,j,i - j));
+            v(i,2 * j + 1) = feval(h_function, v(i,2 * j - 1), ...
+                               v(i - 1,2 * j - 2), parameters(:,:,j,i - j));                             
+          end
         end
+        v(i,2 * i - 2) = feval(h_function, v(i - 1,2 * i - 4), ...
+                               v(i,2 * i - 3), parameters(:,:,i - 1,i));
       end
     end
   end

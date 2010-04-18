@@ -1,7 +1,7 @@
-function [params] = parameters_cvine_ml()  
+function [params] = parameters_dvine_ml()  
   params = struct();
 
-  params.note = 'Canonical vine estimated by maximum likelihood.';
+  params.note = 'D-vine estimated by maximum likelihood.';
   params.runs = 5;
   params.quiet = false;
 
@@ -11,9 +11,9 @@ function [params] = parameters_cvine_ml()
   params.objective_params.variable_bounds = repmat([-10; 10], 1, 3);
   params.objective_params.optimum = 0;
   
-  % LEARNING A CANONICAL VINE BY MAXIMUM LIKELIHOOD.
+  % LEARNING A D-VINE BY MAXIMUM LIKELIHOOD.
   
-  params.learning = 'learning_cvine_ml';
+  params.learning = 'learning_dvine_ml';
   params.learning_params = struct();
   
   % Uniformly select a random ordering of the variables.
@@ -30,7 +30,7 @@ function [params] = parameters_cvine_ml()
   % h-function of the copulas used in the decomposition.
   params.learning_params.h_function = 'h_gaussian';
   
-  params.sampling = 'sampling_cvine';
+  params.sampling = 'sampling_dvine';
   params.sampling_params = struct(); 
   
   % h-function and inverse of the copulas used in the decomposition. 
