@@ -51,7 +51,7 @@ function [params] = parameters_cvine_ml()
   params.termination = 'termination_generations_optimum';
   params.termination_params = struct();
   params.termination_params.max_generations = 25;
-  params.termination_params.error_tolerance = 5e-7;
+  params.termination_params.error_tolerance = 1e-7;
   
   params.selection = 'selection_truncation';
   params.selection_params = struct();

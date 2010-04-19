@@ -5,7 +5,7 @@ function run(parameters)
   % Distribution Algorithm. See the parameters directory for an example.
 
   % Created by Yasser González Fernández (2010).
-
+  
   init_environment();
   params = feval(parameters);
    
@@ -51,7 +51,7 @@ function run(parameters)
         % Execute the verbose method. Verbose methods are used to print
         % information about the evolution of the population.
         if ~params.quiet
-          feval(params.verbose, params, population, evaluation, ...
+          feval(params.verbose, params, generation, population, evaluation, ...
                 selected_population, selected_evaluation, ...
                 sampled_population, sampled_evaluation);
         end
@@ -132,7 +132,7 @@ function run(parameters)
             mean(num_generations), std(num_generations));
     fprintf('Number evaluations: %f (%f)\n', ...
             mean(num_evaluations), std(num_evaluations));
-    fprintf('Best fitness in each generation: %f (%f)\n', ...
+    fprintf('Best fitness: %f (%f)\n', ...
             mean(best_fitness), std(best_fitness));
     fprintf('Runtime: %f seconds (%f)\n', mean(run_time), std(run_time));
 
