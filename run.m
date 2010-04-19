@@ -12,7 +12,6 @@ function run(parameters)
   if ~params.quiet
     fprintf('%s\n\n', params.note);
     fprintf('Execution started at %s\n\n', datestr(now(), 31));
-    print_params(params);
   end  
   
   % Vectors to collect statistics of all the runs.
@@ -126,7 +125,9 @@ function run(parameters)
   % Print global statistics for all runs.
   if ~params.quiet
     fprintf('\n\nGlobal statistics of the runs (mean and standard deviation):\n\n');
-    fprintf('Success: %f (%f)\n', mean(run_success), std(run_success));
+    if ~isnan(params.objective_params.optimum)
+      fprintf('Success: %f (%f)\n', mean(run_success), std(run_success));
+    end
     fprintf('Number generations: %f (%f)\n', ...
             mean(num_generations), std(num_generations));
     fprintf('Number evaluations: %f (%f)\n', ...
@@ -144,10 +145,4 @@ function init_environment()
   
   eda_path = genpath(pwd());
   addpath(eda_path);
-end
-
-function print_params(params)
-  % Print the parameters of the EDA to the standard output.
-  
-  % TODO: Implement this function!
 end
