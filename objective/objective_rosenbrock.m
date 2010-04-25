@@ -5,7 +5,7 @@ function [evaluation] = objective_rosenbrock(params, population)
   % population matrix. The output variable EVALUATION is a column vector with
   % the evaluation of the function at each individual of the given population.
   %
-  % Search domain: -5 <= xi <= 10, i = 1, ..., n. 
+  % Sugested search domain: -5 <= xi <= 10, i = 1, ..., n. 
   % Global minima: x* = (1, ..., 1), f(x*) = 0.
 
   x = population;
