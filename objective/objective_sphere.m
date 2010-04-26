@@ -5,7 +5,6 @@ function [evaluation] = objective_sphere(params, population)
   % population matrix. The output variable EVALUATION is a column vector with
   % the evaluation of the function at each individual of the given population.
   %
-  % Sugested search domain: −5.12 <= xi <= 5.12, i = 1, ..., n.
   % The global minima: x* = (0, ..., 0), f(x*) = 0.
 
   evaluation =  sum(population .^ 2, 2);
