@@ -1,4 +1,4 @@
-function [results] = h_gaussian_inverse(u1, u2, rho)
+function [results] = hinv_gaussian(u1, u2, rho)
   % Evaluate the inverse of the h-function of the bivariate Gaussian copula.
   %
   % See the following for more information:

@@ -21,11 +21,11 @@ function [params] = parameters_dvine_ml()
   
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
-  params.learning_params.marginal_cdf = 'empirical_cdf';
+  params.learning_params.marginal_cdf = 'cdf_empirical';
   
   % A function that estimates the parameters of a bivariate copula from a column
   % vector of observations for each variable.
-  params.learning_params.copula_fit = 'copula_fit_gaussian';
+  params.learning_params.copula_fit = 'copulafit_gaussian';
   
   % h-function of the copulas used in the decomposition.
   params.learning_params.h_function = 'h_gaussian';
@@ -35,11 +35,11 @@ function [params] = parameters_dvine_ml()
   
   % h-function and inverse of the copulas used in the decomposition. 
   params.sampling_params.h_function = 'h_gaussian';
-  params.sampling_params.h_inverse = 'h_gaussian_inverse';
+  params.sampling_params.h_inverse = 'hinv_gaussian';
   
   % A function that evaluates the inverse of the marginal CDF of a variable of
   % the population in a column vector of values of the CDF.
-  params.sampling_params.marginal_cdf_inverse = 'empirical_cdf_inverse_spline';
+  params.sampling_params.marginal_cdf_inverse = 'cdfinv_empirical_spline';
 
   params.seeding = 'seeding_uniform';  
   params.seeding_params = struct();

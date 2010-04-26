@@ -1,4 +1,4 @@
-function [parameters] = copula_fit_gaussian_kendall(x, y)
+function [parameters] = copulafit_gaussian_kendall(x, y)
   % Estimate the parameters of a bivariate Gaussian copula.
   %
   % This function is used to estimate the parameters of a bivariate copula in a
