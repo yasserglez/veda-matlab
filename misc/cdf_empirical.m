@@ -1,5 +1,5 @@
 function [u] = cdf_empirical(sample, x)
-  % Univariate empirical cumulative distribution function.
+  % Univariate empirical CDF.
   %
   % Calculates the empirical CDF from the column vector SAMPLE and returns in
   % the output variable U its evaluation on each element of the column vector X.
