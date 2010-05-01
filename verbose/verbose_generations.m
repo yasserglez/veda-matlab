@@ -8,7 +8,8 @@ function verbose_generations(params, generation, population, evaluation, ...
   fprintf('\nStatistics for generation %d:\n', generation);
   [best_fitness, best_index] = min(evaluation);
   num_vars = params.objective_params.number_variables;
-  message = ['  Best population individual:', repmat(' %f', 1, num_vars), '\n'];
+  message = sprintf('  Best population individual:%s\n', ...
+                    repmat(' %f', 1, num_vars));
   fprintf(message, population(best_index,:));
   fprintf('  Best population individual fitness: %f\n', best_fitness);
   fprintf('  Population fitness: %f (%f)\n', ...
