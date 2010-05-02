@@ -8,7 +8,7 @@ function [params] = parameters_cvine_ml()
   params.objective = 'objective_rosenbrock';
   params.objective_params = struct();
   params.objective_params.number_variables = 3;
-  params.objective_params.variable_bounds = repmat([0; 2], 1, 3);
+  params.objective_params.variable_limits = repmat([0, 2], 3, 1);
   params.objective_params.optimum = 0;
   
   % LEARNING A CANONICAL VINE BY MAXIMUM LIKELIHOOD.
@@ -57,6 +57,8 @@ function [params] = parameters_cvine_ml()
   params.selection_params = struct();
   params.selection_params.truncation_coefficient = 0.3;
 
-  params.verbose = 'verbose_scattermatrix';
+  params.verbose = 'verbose_scatter';
   params.verbose_params = struct();
+  params.verbose_params.x_index = 1;
+  params.verbose_params.y_index = 2;
 end

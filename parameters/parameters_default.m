@@ -25,9 +25,9 @@ function [params] = parameters_default()
   params.objective_params.number_variables = 2;
 
   % Minimum and maximum values for each real variable. This should be set to
-  % a matrix with a column for each variable and two rows correspondig to the
+  % a matrix with a row for each variable and two columns correspondig to the
   % minumum and maximum values for each variable.
-  params.objective_params.variable_bounds = repmat([-10; 10], 1, 2);
+  params.objective_params.variable_limits = repmat([-10, 10], 2, 1);
 
   % Optimum value for the function. It should be set to NaN if it's not known.
   params.objective_params.optimum = 0;

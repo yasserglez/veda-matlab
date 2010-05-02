@@ -13,8 +13,8 @@ function verbose_scatter(params, generation, population, evaluation, ...
   
   x_index = params.verbose_params.x_index;
   y_index = params.verbose_params.y_index;
-  x_lim = params.objective_params.variable_bounds(:,x_index)';
-  y_lim = params.objective_params.variable_bounds(:,y_index)';
+  x_lim = params.objective_params.variable_limits(x_index,:);
+  y_lim = params.objective_params.variable_limits(y_index,:);
   
   set(gcf, 'NumberTitle', 'off');
   set(gcf, 'Name', 'Scatter Plots');  
