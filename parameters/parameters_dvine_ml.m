@@ -48,7 +48,7 @@ function [params] = parameters_dvine_ml()
   params.replacing = 'replacing_none';
   params.replacing_params = struct();
   
-  params.termination = 'termination_generations_optimum';
+  params.termination = 'termination_optimum';
   params.termination_params = struct();
   params.termination_params.max_generations = 25;
   params.termination_params.error_tolerance = 5e-7;

@@ -62,7 +62,7 @@ function [params] = parameters_default()
   
   % Function used to check the stop condition. It should be one of the functions
   % defined in the M-files in the termination directory.
-  params.termination = 'termination_generations_optimum';
+  params.termination = 'termination_optimum';
   
   params.termination_params = struct();
   

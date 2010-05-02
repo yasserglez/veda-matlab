@@ -1,6 +1,6 @@
 function [terminate] = ...
     termination_generations(params, generation, population, evaluation)
-  % Stop the algorithm based on the number of generations.
+  % Stop if a maximum number of generations is reached.
   %
   % PARAMS is a struct with the parameters of the EDA. GENERATION is the number
   % of the generation that has just finished, POPULATION is the population used
