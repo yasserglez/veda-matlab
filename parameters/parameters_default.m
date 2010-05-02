@@ -28,9 +28,11 @@ function [params] = parameters_default()
   % a matrix with a row for each variable and two columns correspondig to the
   % minumum and maximum values for each variable.
   params.objective_params.variable_limits = repmat([-10, 10], 2, 1);
-
-  % Optimum value for the function. It should be set to NaN if it's not known.
+  
+  % Optimum individual and optimum value of the function. This parameters 
+  % should be set to NaN if the are not known.
   params.objective_params.optimum = 0;
+  params.objective_params.optimum_individual = repmat(1, 1, 3);
 
 
   % PARAMETERS OF THE SEEDING METHOD.

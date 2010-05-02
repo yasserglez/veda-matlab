@@ -10,6 +10,7 @@ function [params] = parameters_dvine_ml()
   params.objective_params.number_variables = 3;
   params.objective_params.variable_limits = repmat([-10, 10], 3, 1);
   params.objective_params.optimum = 0;
+  params.objective_params.optimum_individual = repmat(0, 1, 3);
   
   % LEARNING A D-VINE BY MAXIMUM LIKELIHOOD.
   

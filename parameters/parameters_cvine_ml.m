@@ -10,6 +10,7 @@ function [params] = parameters_cvine_ml()
   params.objective_params.number_variables = 3;
   params.objective_params.variable_limits = repmat([0, 2], 3, 1);
   params.objective_params.optimum = 0;
+  params.objective_params.optimum_individual = repmat(1, 1, 3);
   
   % LEARNING A CANONICAL VINE BY MAXIMUM LIKELIHOOD.
   
@@ -17,7 +18,7 @@ function [params] = parameters_cvine_ml()
   params.learning_params = struct();
   
   % Uniformly select a random ordering of the variables.
-  params.learning_params.random_ordering = true;
+  params.learning_params.random_ordering = false;
   
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
@@ -57,8 +58,6 @@ function [params] = parameters_cvine_ml()
   params.selection_params = struct();
   params.selection_params.truncation_coefficient = 0.3;
 
-  params.verbose = 'verbose_scatter';
+  params.verbose = 'verbose_scattermatrix';
   params.verbose_params = struct();
-  params.verbose_params.x_index = 1;
-  params.verbose_params.y_index = 2;
 end
