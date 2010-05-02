@@ -1,7 +1,7 @@
-function verbose_dependence(params, generation, population, evaluation, ...
-                            selected_population, selected_evaluation, ...
-                            sampled_population, sampled_evaluation)
-  % Generate plots with information about the dependence of two variables.
+function verbose_scatter(params, generation, population, evaluation, ...
+                         selected_population, selected_evaluation, ...
+                         sampled_population, sampled_evaluation)
+  % Scatter plot of two variables in the different populations.
   %
   % This will create bivariate scatter plots for the given variables in the
   % current, selected and simulated populations. The variables are selected
@@ -16,11 +16,13 @@ function verbose_dependence(params, generation, population, evaluation, ...
   x_lim = params.objective_params.variable_bounds(:,x_index)';
   y_lim = params.objective_params.variable_bounds(:,y_index)';
   
+  set(gcf, 'NumberTitle', 'off');
+  set(gcf, 'Name', 'Scatter Plots');  
+  
   % Scatter plot of the variables in the population.
   subplot(1, 3, 1);
-  scatter(population(:,x_index), population(:,y_index), 'b.');
+  scatter(population(:,x_index), population(:,y_index), '.');
   box on;
-  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));
@@ -30,9 +32,8 @@ function verbose_dependence(params, generation, population, evaluation, ...
   
   % Scatter plot of the variables in the selected population.
   subplot(1, 3, 2);
-  scatter(selected_population(:,x_index), selected_population(:,y_index), 'b.');
+  scatter(selected_population(:,x_index), selected_population(:,y_index), '.');
   box on;
-  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));
@@ -42,9 +43,8 @@ function verbose_dependence(params, generation, population, evaluation, ...
   
   % Scatter plot of the variables in the sampled population.
   subplot(1, 3, 3);
-  scatter(sampled_population(:,x_index), sampled_population(:,y_index), 'b.');
+  scatter(sampled_population(:,x_index), sampled_population(:,y_index), '.');
   box on;
-  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));
