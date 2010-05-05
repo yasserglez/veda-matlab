@@ -7,6 +7,20 @@ function [x] = cdfinv_empirical_spline(sample, u)
   
   % Created by Yasser González Fernández (2010).  
   
-  sample_u = cdf_empirical(sample, sample);
-  x = interp1(sample_u, sample, u, 'spline');
+  if exist('ecdf', 'file') == 2
+    % MATLAB Statistics Toolbox.
+    [ecdf_f, ecdf_x] = ecdf(sample);
+    n = size(ecdf_x, 1);
+    sample_u = ecdf_f(2:n);
+    sample = ecdf_x(2:n);
+  else
+    % Octave Statistics Package.
+    unique_sample = unique(sample);
+    sample_u = empirical_cdf(unique_sample, sample);
+    sample = unique_sample;
+  end 
+  
+  sample_u(1) = 0;
+  sample_u(size(sample_u, 1)) = 1;
+  x = interp1(sample_u, sample, u, 'spline');  
 end
