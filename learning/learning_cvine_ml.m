@@ -52,8 +52,8 @@ function [model] = learning_cvine_ml(params, population, evaluation)
   model.parameters = parameters;
 end
 
-function parameters = cvine_starting_parameters(uniform_pop, ...
-                                                copula_fit, h_function)
+function parameters = cvine_starting_parameters(uniform_pop, copula_fit, ...
+                                                h_function)
   % Calculate starting parameters of the copulas in a canonical vine.
   
   % WARNING: The way the first dimension of v is indexed here differs from the

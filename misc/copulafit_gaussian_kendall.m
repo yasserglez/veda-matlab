@@ -14,6 +14,12 @@ function [parameters] = copulafit_gaussian_kendall(x, y)
   
   % Created by Yasser González Fernández (2010).
   
-  tau = corr([x y], 'type', 'Kendall');
-  parameters = sin(tau(1,2) * (pi/2));
+  if exist('kendall', 'file') == 2
+    % Octave Statistics Package.
+    tau = kendall(x, y);
+  else
+    % MATLAB Statistics Toolbox.
+    tau = corr(x, y, 'type', 'Kendall');
+  end
+  parameters = sin(tau * (pi / 2));
 end

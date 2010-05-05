@@ -25,33 +25,33 @@ function [population] = sampling_cvine(params, model, selected_population, ...
   % Simulate a population of dependent Uniform(0,1) variables variables) from
   % the given canonical vine.
     
-  num_individuals = params.seeding_params.population_size;
+  pop_size = params.seeding_params.population_size;
   n = params.objective_params.number_variables;
   h_inverse = params.sampling_params.h_inverse;
   h_function = params.sampling_params.h_function;
-  parameters = model.parameters;
+  theta = model.parameters;
 
-  uniform_pop = zeros(num_individuals, n);
-  W = unifrnd(0, 1, num_individuals, n);
+  uniform_pop = zeros(pop_size, n);
+  W = unifrnd(0, 1, pop_size, n);
   v = zeros(n, n);
 
-  for individual = 1:num_individuals
+  for individual = 1:pop_size
     w = W(individual,:);
-    uniform_pop(individual,1) = w(1);
     v(1,1) = w(1);
+    uniform_pop(individual,1) = v(1,1);
     
     for i = 2:n
       % Sampling the ith variable.
       v(i,1) = w(i);
       for k = i-1:-1:1
-        v(i,1) = feval(h_inverse, v(i,1), v(k,k), parameters(:,:,k,i-k));
+        v(i,1) = feval(h_inverse, v(i,1), v(k,k), theta(:,:,k,i-k));
       end
       uniform_pop(individual,i) = v(i,1);
       
-      % Compute the h-inverse values needed for sampling the (i + 1)th variable.
+      % Compute the h-inverse values needed for sampling the (i+1)th variable.
       if i ~= n
         for j = 1:i-1
-          v(i,j + 1) = feval(h_function, v(i,j), v(j,j), parameters(:,:,j,i-j));
+          v(i,j+1) = feval(h_function, v(i,j), v(j,j), theta(:,:,j,i-j));
         end
       end
     end
@@ -64,7 +64,7 @@ function [population] = sampling_cvine(params, model, selected_population, ...
   cdf_inverse = params.sampling_params.marginal_cdf_inverse;
   ordering = model.ordering;
   
-  population = zeros(num_individuals, n);
+  population = zeros(pop_size, n);
   for k = 1:n
     population(:,ordering(k)) = feval(cdf_inverse, ...
                                       selected_population(:,ordering(k)), ...
