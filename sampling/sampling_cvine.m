@@ -29,11 +29,11 @@ function [population] = sampling_cvine(params, model, selected_population, ...
   n = params.objective_params.number_variables;
   h_inverse = params.sampling_params.h_inverse;
   h_function = params.sampling_params.h_function;
-  theta = model.parameters;
+  parameters = model.parameters;
 
   uniform_pop = zeros(pop_size, n);
   W = unifrnd(0, 1, pop_size, n);
-  v = zeros(n, n);
+  v = sparse(n, n);
 
   for individual = 1:pop_size
     w = W(individual,:);
@@ -44,14 +44,14 @@ function [population] = sampling_cvine(params, model, selected_population, ...
       % Sampling the ith variable.
       v(i,1) = w(i);
       for k = i-1:-1:1
-        v(i,1) = feval(h_inverse, v(i,1), v(k,k), theta(:,:,k,i-k));
+        v(i,1) = feval(h_inverse, v(i,1), v(k,k), parameters{k,i-k});
       end
       uniform_pop(individual,i) = v(i,1);
       
       % Compute the h-inverse values needed for sampling the (i+1)th variable.
       if i ~= n
         for j = 1:i-1
-          v(i,j+1) = feval(h_function, v(i,j), v(j,j), theta(:,:,j,i-j));
+          v(i,j+1) = feval(h_function, v(i,j), v(j,j), parameters{j,i-j});
         end
       end
     end

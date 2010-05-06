@@ -60,29 +60,23 @@ function parameters = cvine_starting_parameters(uniform_pop, copula_fit, ...
   % Algorithm 3 in SAMBA/24/06 because of MATLAB 1-based indexing.
   
   n = size(uniform_pop, 2);
-  v = zeros(size(uniform_pop, 1), 1, n, n);
+  v = cell(n, n);
+  
+  parameters = cell(n, n);
 
   for i = 1:n
-    v(:,:,1,i) = uniform_pop(:,i);
+    v{1,i} = uniform_pop(:,i);
   end
 
-  allocated = false;
   for j = 1:n-1
     for i = 1:n-j
-      theta = feval(copula_fit, v(:,:,j,1), v(:,:,j,i+1));
-      if ~allocated
-        % Allocate memory according to the number of parameters of the copula.
-        parameters = zeros(1, size(theta, 2), n, n);
-        allocated = true;
-      end
-      parameters(:,:,j,i) = theta;
+      parameters{j,i} = feval(copula_fit, v{j,1}, v{j,i+1});
     end
     
     if j ~= n-1
       % Compute observations for the next tree.
       for i = 1:n-j
-        v(:,:,j+1,i) = feval(h_function, v(:,:,j,i+1), v(:,:,j,1), ...
-                             parameters(:,:,j,i));
+        v{j+1,i} = feval(h_function, v{j,i+1}, v{j,1}, parameters{j,i});
       end
     end
   end
