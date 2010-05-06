@@ -38,7 +38,6 @@ function verbose_scatter(params, generation, population, evaluation, ...
     hold off;
   end
   box on;
-  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));
@@ -55,7 +54,6 @@ function verbose_scatter(params, generation, population, evaluation, ...
     hold off;
   end  
   box on;
-  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));
@@ -72,7 +70,6 @@ function verbose_scatter(params, generation, population, evaluation, ...
     hold off;
   end  
   box on;
-  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));

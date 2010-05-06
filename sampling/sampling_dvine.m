@@ -65,7 +65,7 @@ function [population] = sampling_dvine(params, model, selected_population, ...
           end
         end
         v(i,2*i-2) = feval(h_function, v(i-1,2*i-4), v(i,2*i-3), ...
-                           parameters{i-1,i});
+                           parameters{i-1,1});
       end
     end
   end
