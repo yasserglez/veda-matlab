@@ -66,8 +66,8 @@ function parameters = dvine_starting_parameters(uniform_pop, ...
   end
   
   allocated = false;
-  for i = 1:n - 1
-    theta = feval(copula_fit, v(:,:,1,i), v(:,:,1,i + 1));
+  for i = 1:n-1
+    theta = feval(copula_fit, v(:,:,1,i), v(:,:,1,i+1));
     if ~allocated
       % Allocate memory according to the number of parameters of the copula.
       parameters = zeros(1, size(theta, 2), n, n);
@@ -77,39 +77,35 @@ function parameters = dvine_starting_parameters(uniform_pop, ...
   end
   v(:,:,2,1) = feval(h_function, v(:,:,1,1), v(:,:,1,2), parameters(:,:,1,1));
   
-  for k = 1:n - 3
-    v(:,:,2,2 * k) = feval(h_function, v(:,:,1,k + 2), v(:,:,1,k + 1), ...
-                           parameters(:,:,1,k + 1));
-    v(:,:,2,2 * k + 1) = feval(h_function, v(:,:,1,k + 1), v(:,:,1,k + 2), ...
-                           parameters(:,:,1,k + 1));                         
+  for k = 1:n-3
+    v(:,:,2,2*k) = feval(h_function, v(:,:,1,k+2), v(:,:,1,k+1), ...
+                         parameters(:,:,1,k+1));
+    v(:,:,2,2*k+1) = feval(h_function, v(:,:,1,k+1), v(:,:,1,k+2), ...
+                           parameters(:,:,1,k+1));
   end
-  v(:,:,2,2 * n - 4) = feval(h_function, v(:,:,1,n), v(:,:,1,n - 1), ...
-                             parameters(:,:,1,n - 1));
+  v(:,:,2,2*n-4) = feval(h_function, v(:,:,1,n), v(:,:,1,n-1), ...
+                         parameters(:,:,1,n-1));
                            
-  for j = 2:n - 1
-    for i = 1:n - j
-      theta = feval(copula_fit, v(:,:,j,2 * i - 1), v(:,:,j,2 * i));
+  for j = 2:n-1
+    for i = 1:n-j
+      theta = feval(copula_fit, v(:,:,j,2*i-1), v(:,:,j,2*i));
       parameters(:,:,j,i) = theta;
     end
     
     % Compute observations for the next tree.
-    if j ~= n - 1
-      v(:,:,j + 1,1) = feval(h_function, v(:,:,j,1), v(:,:,j,2), ...
-                             parameters(:,:,j,1));
+    if j ~= n-1
+      v(:,:,j+1,1) = feval(h_function, v(:,:,j,1), v(:,:,j,2), ...
+                           parameters(:,:,j,1));
       if n > 4
-        for i = 1:n - j - 2
-          v(:,:,j + 1,2 * i) = feval(h_function, v(:,:,j,2 * i + 2), ...
-                                     v(:,:,j,2 * i + 1), ...
-                                     parameters(:,:,j,i + 1));
-          v(:,:,j + 1,2 * i + 1) = feval(h_function, v(:,:,j,2 * i + 1), ...
-                                         v(:,:,j,2 * i + 2), ...
-                                         parameters(:,:,j,i + 1));
+        for i = 1:n-j-2
+          v(:,:,j+1,2*i) = feval(h_function, v(:,:,j,2*i+2), ...
+                                 v(:,:,j,2*i+1), parameters(:,:,j,i+1));
+          v(:,:,j+1,2*i+1) = feval(h_function, v(:,:,j,2*i+1), ...
+                                   v(:,:,j,2*i+2), parameters(:,:,j,i+1));
         end
       end
-      v(:,:,j + 1,2 * n - 2 * j - 2) = feval(h_function, ...
-                                             v(:,:,j,2 * n - 2 * j), ...
-                                             v(:,:,j,2 * n - 2 * j - 1), ...
-                                             parameters(:,:,j,n - j));      
+      v(:,:,j+1,2*n-2*j-2) = feval(h_function, v(:,:,j,2*n-2*j), ...
+                                   v(:,:,j,2*n-2*j-1), parameters(:,:,j,n-j));
     end
   end
 end

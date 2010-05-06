@@ -67,9 +67,9 @@ function parameters = cvine_starting_parameters(uniform_pop, copula_fit, ...
   end
 
   allocated = false;
-  for j = 1:n - 1
-    for i = 1:n - j
-      theta = feval(copula_fit, v(:,:,j,1), v(:,:,j,i + 1));
+  for j = 1:n-1
+    for i = 1:n-j
+      theta = feval(copula_fit, v(:,:,j,1), v(:,:,j,i+1));
       if ~allocated
         % Allocate memory according to the number of parameters of the copula.
         parameters = zeros(1, size(theta, 2), n, n);
@@ -80,9 +80,9 @@ function parameters = cvine_starting_parameters(uniform_pop, copula_fit, ...
     
     if j ~= n-1
       % Compute observations for the next tree.
-      for i = 1:n - j
-        v(:,:,j + 1,i) = feval(h_function, v(:,:,j,i + 1), v(:,:,j,1), ...
-                               parameters(:,:,j,i));
+      for i = 1:n-j
+        v(:,:,j+1,i) = feval(h_function, v(:,:,j,i+1), v(:,:,j,1), ...
+                             parameters(:,:,j,i));
       end
     end
   end

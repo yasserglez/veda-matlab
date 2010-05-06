@@ -16,8 +16,10 @@ function verbose_scatter(params, generation, population, evaluation, ...
   x_index = params.verbose_params.x_index;
   y_index = params.verbose_params.y_index;
   
-  x_lim = params.objective_params.variable_limits(x_index,:);
-  y_lim = params.objective_params.variable_limits(y_index,:);
+  lower_bounds = params.objective_params.lower_bounds;
+  upper_bounds = params.objective_params.upper_bounds;
+  x_lim = [lower_bounds(x_index), upper_bounds(x_index)];
+  y_lim = [lower_bounds(y_index), upper_bounds(y_index)];  
   optimum_known = ~isnan(params.objective_params.optimum_individual);
   if optimum_known
     x_optimum = params.objective_params.optimum_individual(1,x_index);
@@ -36,6 +38,7 @@ function verbose_scatter(params, generation, population, evaluation, ...
     hold off;
   end
   box on;
+  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));
@@ -52,6 +55,7 @@ function verbose_scatter(params, generation, population, evaluation, ...
     hold off;
   end  
   box on;
+  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));
@@ -68,6 +72,7 @@ function verbose_scatter(params, generation, population, evaluation, ...
     hold off;
   end  
   box on;
+  grid on;
   axis equal;
   xlabel(sprintf('x_{%i}', x_index));
   ylabel(sprintf('x_{%i}', y_index));

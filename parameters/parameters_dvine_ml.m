@@ -2,15 +2,17 @@ function [params] = parameters_dvine_ml()
   params = struct();
 
   params.note = 'D-vine estimated by maximum likelihood.';
-  params.runs = 5;
+  params.runs = 1;
   params.quiet = false;
 
   params.objective = 'objective_sphere';
   params.objective_params = struct();
   params.objective_params.number_variables = 3;
-  params.objective_params.variable_limits = repmat([-10, 10], 3, 1);
+  n = params.objective_params.number_variables;
+  params.objective_params.lower_bounds = repmat(-5.12, 1, n);
+  params.objective_params.upper_bounds = repmat(5.12, 1, n);
   params.objective_params.optimum = 0;
-  params.objective_params.optimum_individual = repmat(0, 1, 3);
+  params.objective_params.optimum_individual = repmat(0, 1, n);
   
   % LEARNING A D-VINE BY MAXIMUM LIKELIHOOD.
   
@@ -26,7 +28,7 @@ function [params] = parameters_dvine_ml()
   
   % A function that estimates the parameters of a bivariate copula from a column
   % vector of observations for each variable.
-  params.learning_params.copula_fit = 'copulafit_gaussian';
+  params.learning_params.copula_fit = 'copulafit_gaussian_kendall';
   
   % h-function of the copulas used in the decomposition.
   params.learning_params.h_function = 'h_gaussian';
@@ -52,7 +54,7 @@ function [params] = parameters_dvine_ml()
   params.termination = 'termination_optimum';
   params.termination_params = struct();
   params.termination_params.max_generations = 25;
-  params.termination_params.error_tolerance = 5e-7;
+  params.termination_params.error_tolerance = 1e-7;
   
   params.selection = 'selection_truncation';
   params.selection_params = struct();

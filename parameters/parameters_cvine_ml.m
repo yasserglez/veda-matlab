@@ -2,15 +2,17 @@ function [params] = parameters_cvine_ml()
   params = struct();
 
   params.note = 'Canonical vine estimated by maximum likelihood.';
-  params.runs = 5;
+  params.runs = 1;
   params.quiet = false;
 
-  params.objective = 'objective_rosenbrock';
+  params.objective = 'objective_sphere';
   params.objective_params = struct();
   params.objective_params.number_variables = 3;
-  params.objective_params.variable_limits = repmat([0, 2], 3, 1);
+  n = params.objective_params.number_variables;
+  params.objective_params.lower_bounds = repmat(-5.12, 1, n);
+  params.objective_params.upper_bounds = repmat(5.12, 1, n);
   params.objective_params.optimum = 0;
-  params.objective_params.optimum_individual = repmat(1, 1, 3);
+  params.objective_params.optimum_individual = repmat(0, 1, n);
   
   % LEARNING A CANONICAL VINE BY MAXIMUM LIKELIHOOD.
   
@@ -22,11 +24,11 @@ function [params] = parameters_cvine_ml()
   
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
-  params.learning_params.marginal_cdf = 'cdf_normal';
+  params.learning_params.marginal_cdf = 'cdf_empirical';
   
   % A function that estimates the parameters of a bivariate copula from a column
   % vector of observations for each variable.
-  params.learning_params.copula_fit = 'copulafit_gaussian';
+  params.learning_params.copula_fit = 'copulafit_gaussian_kendall';
   
   % h-function of the copulas used in the decomposition.
   params.learning_params.h_function = 'h_gaussian';
@@ -40,11 +42,11 @@ function [params] = parameters_cvine_ml()
   
   % A function that evaluates the inverse of the marginal CDF of a variable of
   % the population in a column vector of values of the CDF.
-  params.sampling_params.marginal_cdf_inverse = 'cdfinv_normal';
+  params.sampling_params.marginal_cdf_inverse = 'cdfinv_empirical_spline';
 
   params.seeding = 'seeding_uniform';  
   params.seeding_params = struct();
-  params.seeding_params.population_size = 200;
+  params.seeding_params.population_size = 100;
   
   params.replacing = 'replacing_none';
   params.replacing_params = struct();
@@ -58,6 +60,6 @@ function [params] = parameters_cvine_ml()
   params.selection_params = struct();
   params.selection_params.truncation_coefficient = 0.3;
 
-  params.verbose = 'verbose_scattermatrix';
+  params.verbose = 'verbose_none';
   params.verbose_params = struct();
 end

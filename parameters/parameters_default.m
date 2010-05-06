@@ -23,16 +23,16 @@ function [params] = parameters_default()
 
   % Number of variables of the objective function.
   params.objective_params.number_variables = 2;
+  n = params.objective_params.number_variables;
 
-  % Minimum and maximum values for each real variable. This should be set to
-  % a matrix with a row for each variable and two columns correspondig to the
-  % minumum and maximum values for each variable.
-  params.objective_params.variable_limits = repmat([-10, 10], 2, 1);
+  % Minimum and maximum values for each variable.
+  params.objective_params.lower_bounds = repmat(-5.12, 1, n);
+  params.objective_params.upper_bounds = repmat(5.12, 1, n);
   
   % Optimum individual and optimum value of the function. This parameters 
   % should be set to NaN if the are not known.
   params.objective_params.optimum = 0;
-  params.objective_params.optimum_individual = repmat(1, 1, 3);
+  params.objective_params.optimum_individual = repmat(0, 1, n);
 
 
   % PARAMETERS OF THE SEEDING METHOD.

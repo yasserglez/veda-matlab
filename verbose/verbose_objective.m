@@ -10,8 +10,10 @@ function verbose_objective(params, generation, population, evaluation, ...
   % Created by Yasser González Fernández (2010).
   
   % Setup parameters.
-  x_lim = params.objective_params.variable_limits(1,:);
-  y_lim = params.objective_params.variable_limits(2,:);
+  lower_bounds = params.objective_params.lower_bounds;
+  upper_bounds = params.objective_params.upper_bounds;
+  x_lim = [lower_bounds(1), upper_bounds(1)];
+  y_lim = [lower_bounds(2), upper_bounds(2)];
   if (isfield(params.verbose_params, 'azimuth') && ...
       isfield(params.verbose_params, 'elevation'))
     azimuth = params.verbose_params.azimuth;
