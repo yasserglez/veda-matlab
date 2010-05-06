@@ -7,5 +7,5 @@ function [evaluation] = objective_sphere(params, population)
   %
   % The global minima: x* = (0, ..., 0), f(x*) = 0.
 
-  evaluation =  sum(population .^ 2, 2);
+  evaluation = sum(population .^ 2, 2);
 end
