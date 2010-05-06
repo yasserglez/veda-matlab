@@ -1,9 +1,9 @@
-function [x] = cdfinv_empirical_spline(sample, u)
+function [x] = cdfinv_empirical_linear(sample, u)
   % Inverse of an univariate empirical CDF.
   %
   % Calculates the values of the empirical CDF in the column vector SAMPLE.
   % Using this values of the empirical CDF, approximates its inverse using
-  % cubic spline interpolation and evaluates the column vector U.
+  % linear interpolation and evaluates the column vector U.
   
   % Created by Yasser González Fernández (2010).  
   
@@ -22,5 +22,5 @@ function [x] = cdfinv_empirical_spline(sample, u)
   
   sample_u(1) = 0;
   sample_u(size(sample_u, 1)) = 1;
-  x = interp1(sample_u, sample, u, 'spline');
+  x = interp1q(sample_u, sample, u);
 end
