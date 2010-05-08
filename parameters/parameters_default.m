@@ -62,16 +62,18 @@ function [params] = parameters_default()
   
   % PARAMETERS OF THE STOP CONDITION.
   
-  % Function used to check the stop condition. It should be one of the functions
-  % defined in the M-files in the termination directory.
-  params.termination = 'termination_optimum';
+  % Functions used to check the stop condition. It should be set to a cell
+  % array containing functions defined in the M-files in the termination 
+  % directory. All this functions will be evaluated on each generation, if one 
+  % of them returns 1 the the algorithm will stop.
+  params.termination = {'termination_generations', 'termination_optimum'};
   
   params.termination_params = struct();
   
-  % Maximum number of generations and the error tolerance checking the
+  % Maximum number of generations and the error tolerance when checking the
   % evaluation of the objective function against the known optimum.
   params.termination_params.max_generations = 10;
-  params.termination_params.error_tolerance = 1e-10;
+  params.termination_params.error_tolerance = 1e-7;
   
   
   % PARAMETERS OF THE SELECTION METHOD.
