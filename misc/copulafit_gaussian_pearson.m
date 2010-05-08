@@ -1,4 +1,4 @@
-function [parameters] = copulafit_gaussian(x, y)
+function [parameters] = copulafit_gaussian_pearson(x, y)
   % Estimate the parameters of a bivariate Gaussian copula.
   %
   % This function is used to estimate the parameters of a bivariate copula in a
