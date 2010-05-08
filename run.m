@@ -117,7 +117,7 @@ function run(parameters)
     end
     
     if ~params.quiet
-      msg = '\nRun %d of %d stoped at generation %d. Time: %f seconds.\n';
+      msg = '\nRun %d of %d stoped at generation %d Time: %f seconds\n\n';
       fprintf(msg, run, params.runs, num_generations(run), run_time(run));
     end
   end

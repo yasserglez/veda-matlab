@@ -1,7 +1,7 @@
 function verbose_objective(params, generation, population, evaluation, ...
                            selected_population, selected_evaluation, ...
                            sampled_population, sampled_evaluation)
-  % Plots the objective function and markers for the best and optimum individuals.
+  % Plots the objective function and the best and optimum individuals.
   %
   % The position of the camera can be set by the optional parameters
   % PARAMS.verbose_params.azimuth and PARAMS.verbose_params.elevation. See the
