@@ -24,7 +24,7 @@ function [params] = parameters_cvine_ml()
   
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
-  params.learning_params.marginal_cdf = 'cdf_empirical';
+  params.learning_params.marginal_cdf = 'cdf_gaussian';
   
   % A function that estimates the parameters of a bivariate copula from a column
   % vector of observations for each variable.
@@ -42,7 +42,7 @@ function [params] = parameters_cvine_ml()
   
   % A function that evaluates the inverse of the marginal CDF of a variable of
   % the population in a column vector of values of the CDF.
-  params.sampling_params.marginal_cdf_inverse = 'cdfinv_empirical_spline';
+  params.sampling_params.marginal_cdf_inverse = 'cdfinv_gaussian';
 
   params.seeding = 'seeding_uniform';  
   params.seeding_params = struct();
