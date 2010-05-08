@@ -60,6 +60,6 @@ function [params] = parameters_dvine_ml()
   params.selection_params = struct();
   params.selection_params.truncation_coefficient = 0.3;
 
-  params.verbose = 'verbose_none';
+  params.verbose = {'verbose_none'};
   params.verbose_params = struct();
 end

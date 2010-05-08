@@ -1,6 +1,6 @@
-function verbose_scattermatrix(params, generation, population, evaluation, ...
-                               selected_population, selected_evaluation, ...
-                               sampled_population, sampled_evaluation)
+function verbose_scattermatrix(params, generation, population, fitness, ...
+                               selected_population, selected_fitness, ...
+                               sampled_population, sampled_fitness)
   % Histograms and scatter plots for all pairs of variables.
   %
   % This verbose method uses the PLOTMATRIX function to plot histograms
@@ -16,7 +16,7 @@ function verbose_scattermatrix(params, generation, population, evaluation, ...
   title(sprintf('Generation %i', generation));
   for k = 1:size(axes_handles, 1)
     ylabel(axes_handles(k,1), sprintf('x_{%i}', k));
-    xlabel(axes_handles(size(axes_handles, 1),k), sprintf('x_{%i}', k));
+    xlabel(axes_handles(end,k), sprintf('x_{%i}', k));
   end
   if ~isnan(params.objective_params.optimum_individual)
     for i = 1:size(axes_handles,2)

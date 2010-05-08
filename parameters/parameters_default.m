@@ -113,9 +113,10 @@ function [params] = parameters_default()
   
   % PARAMETERS RELATED WITH THE INFORMATION PRINTED FOR EACH GENERATION.
   
-  % Function used print information during the evolution. It should be one of
-  % the functions defined in the M-files in the verbose directory.
-  params.verbose = 'verbose_none';
+  % Functions used print information during the evolution. It should be set to a
+  % cell array containing functions defined in the M-files in the verbose
+  % directory.
+  params.verbose = {'verbose_none'};
   
   params.verbose_params = struct();
 end

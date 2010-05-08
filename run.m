@@ -54,9 +54,11 @@ function run(parameters)
         % Execute the verbose methods. Verbose methods are used to print
         % information about the evolution of the population.
         if ~params.quiet
-          feval(params.verbose, params, num_generations(run), ...
-                population, fitness, selected_population, selected_fitness, ...
-                sampled_population, sampled_fitness);
+          for i = 1:numel(params.verbose)
+            feval(params.verbose{i}, params, num_generations(run), ...
+                  population, fitness, selected_population, selected_fitness, ...
+                  sampled_population, sampled_fitness);
+          end
         end
       end
       
@@ -127,17 +129,17 @@ function run(parameters)
 
   % Print global statistics for all runs.
   if ~params.quiet
-    fprintf('\n\nGlobal statistics (mean and standard deviation):\n\n');
+    fprintf('\nGlobal statistics (mean and standard deviation):\n');
     if ~isnan(params.objective_params.optimum)
-      fprintf('Success: %f (%f)\n', mean(run_success), std(run_success));
+      fprintf('  Success: %f (%f)\n', mean(run_success), std(run_success));
     end
-    fprintf('Number generations: %f (%f)\n', ...
+    fprintf('  Number generations: %f (%f)\n', ...
             mean(num_generations), std(num_generations));
-    fprintf('Number evaluations: %f (%f)\n', ...
+    fprintf('  Number evaluations: %f (%f)\n', ...
             mean(num_evaluations), std(num_evaluations));
-    fprintf('Best fitness: %f (%f)\n', ...
+    fprintf('  Best fitness: %f (%f)\n', ...
             mean(best_fitness), std(best_fitness));
-    fprintf('Runtime: %f seconds (%f)\n', mean(run_time), std(run_time));
+    fprintf('  Runtime: %f seconds (%f)\n', mean(run_time), std(run_time));
 
     fprintf('\n\nExecution finished at: %s\n', datestr(now(), 31));
   end

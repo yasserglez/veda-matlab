@@ -1,6 +1,6 @@
-function verbose_objective(params, generation, population, evaluation, ...
-                           selected_population, selected_evaluation, ...
-                           sampled_population, sampled_evaluation)
+function verbose_objective(params, generation, population, fitness, ...
+                           selected_population, selected_fitness, ...
+                           sampled_population, sampled_fitness)
   % Plots the objective function and the best and optimum individuals.
   %
   % The position of the camera can be set by the optional parameters
@@ -58,7 +58,7 @@ function verbose_objective(params, generation, population, evaluation, ...
   
   % Plot a marker for the best individual of the population.
   hold('on');
-  [best_fitness, best_index] = min(evaluation);
+  [best_fitness, best_index] = min(fitness);
   best_indiv = population(best_index,:);
   plot3(best_indiv(1), best_indiv(2), best_fitness, '.b', 'MarkerSize', 18);
   hold('off');

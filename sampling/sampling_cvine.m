@@ -1,5 +1,5 @@
 function [population] = sampling_cvine(params, model, selected_population, ...
-                                       selected_evaluation)
+                                       selected_fitness)
   % Sample a canonical vine learned from a population.
   %
   % PARAMS is a struct with the parameters of the EDA. MODEL is a struct
@@ -7,7 +7,7 @@ function [population] = sampling_cvine(params, model, selected_population, ...
   % vector for the order of the variables and "parameters", a matrix with 
   % the parameters of each copula in the pair-copula decomposition.
   % SELECTED_POPULATION is the population from where the canonical vine was
-  % learned and SELECTED_EVALUATION its evaluation.
+  % learned and SELECTED_FITNESS its evaluation.
   %
   % The output variable POPULATION is the random population sampled from the
   % canonical vine. The population is returned as a matrix with columns for
