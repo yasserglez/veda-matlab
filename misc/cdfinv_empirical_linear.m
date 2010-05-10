@@ -1,9 +1,9 @@
-function [x] = cdfinv_empirical_linear(sample, u)
+function x = cdfinv_empirical_linear(sample, u)
   % Inverse of an univariate empirical CDF.
   %
   % Calculates the values of the empirical CDF in the column vector SAMPLE.
-  % Using this values of the empirical CDF, approximates its inverse using
-  % linear interpolation and evaluates the column vector U.
+  % Using this values, approximates its inverse using linear interpolation and
+  % evaluates the column vector U.
   
   % Created by Yasser González Fernández (2010).  
   

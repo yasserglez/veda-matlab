@@ -1,4 +1,4 @@
-function [x] = cdfinv_gaussian(sample, u)
+function x = cdfinv_gaussian(sample, u)
   % Inverse of the univariate Normal CDF.
   %
   % Estimates the parameters of the Normal distribution from SAMPLE and sets X

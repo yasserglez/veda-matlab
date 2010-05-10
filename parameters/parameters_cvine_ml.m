@@ -1,4 +1,4 @@
-function [params] = parameters_cvine_ml()  
+function params = parameters_cvine_ml()  
   params = struct();
 
   params.note = 'Canonical vine estimated by maximum likelihood.';

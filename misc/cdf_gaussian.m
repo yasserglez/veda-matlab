@@ -1,4 +1,4 @@
-function [u] = cdf_gaussian(sample, x)
+function u = cdf_gaussian(sample, x)
   % Univariate Normal CDF.
   %
   % Estimates the parameters of the Normal distribution from SAMPLE and sets U

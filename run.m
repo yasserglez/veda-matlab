@@ -8,7 +8,7 @@ function run(parameters)
   
   init_environment();
   params = feval(parameters);
-   
+
   if ~params.quiet
     fprintf('%s\n\n', params.note);
     fprintf('Execution started at %s\n\n', datestr(now(), 31));

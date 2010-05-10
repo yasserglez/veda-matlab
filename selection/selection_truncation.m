@@ -1,8 +1,8 @@
-function [selection] = selection_truncation(params, population, evaluation)
+function selection = selection_truncation(params, population, fitness)
   % Apply selection by truncation from the given population.
   %
   % PARAMS is a struct with the parameters of the EDA. POPULATION is the
-  % population of the current generation and EVALUATION the evaluation of the
+  % population of the current generation and FITNESS the evaluation of the
   % inidivuals of this population.
   %
   % The output variable SELECTION is a column vector with the indexes of the
@@ -15,6 +15,6 @@ function [selection] = selection_truncation(params, population, evaluation)
 
   coef = params.selection_params.truncation_coefficient;
   pop_size = size(population, 1);
-  [sorted, indexes] = sort(evaluation);
+  [sorted, indexes] = sort(fitness);
   selection = indexes(1:ceil(coef * pop_size));
 end

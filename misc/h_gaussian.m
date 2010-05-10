@@ -1,7 +1,7 @@
-function [results] = h_gaussian(u1, u2, rho)
+function results = h_gaussian(u1, u2, rho)
   % Evaluate the h-function of the bivariate Gaussian copula.
   %
-  % See the following for more information:
+  % References:
   %
   % K. Aas, C. Czado, A. Frigessi, and H. Bakken. Pair-copula constructions of
   % multiple dependence. Note SAMBA/24/06, Norwegian Computing Center, NR, 2006.  

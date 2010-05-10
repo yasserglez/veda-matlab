@@ -1,4 +1,4 @@
-function [u] = cdf_empirical(sample, x)
+function u = cdf_empirical(sample, x)
   % Univariate empirical CDF.
   %
   % Calculates the empirical CDF from the column vector SAMPLE and returns in

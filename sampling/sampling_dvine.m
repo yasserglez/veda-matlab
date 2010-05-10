@@ -1,10 +1,10 @@
-function [population] = sampling_dvine(params, model, selected_population, ...
-                                       selected_fitness)
+function population = ...
+    sampling_dvine(params, model, selected_population, selected_fitness)
   % Sample a D-vine learned from a population.
   %
   % PARAMS is a struct with the parameters of the EDA. MODEL is a struct
-  % representing the D-vine, it should have two fields: "ordering", a vector for
-  % the order of the variables and "parameters", a matrix with  the parameters
+  % representing the D-vine, it should have two fields: ordering, a vector for
+  % the order of the variables and parameters, a matrix with  the parameters
   % of each copula in the pair-copula decomposition. SELECTED_POPULATION is the
   % population from where the canonical vine was learned and SELECTED_FITNESS
   % its evaluation.
@@ -14,7 +14,7 @@ function [population] = sampling_dvine(params, model, selected_population, ...
   % and rows for indiviluals. The number of individuals in the population is
   % given by PARAMS.seeding_params.population_size.
   %
-  % See the following for more information:
+  % References:
   %
   % K. Aas, C. Czado, A. Frigessi, and H. Bakken. Pair-copula constructions of
   % multiple dependence. Note SAMBA/24/06, Norwegian Computing Center, NR, 2006.  

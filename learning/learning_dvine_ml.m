@@ -1,16 +1,16 @@
-function [model] = learning_dvine_ml(params, population, evaluation)
-  % Learns a D-vine from the given population using maximum likelihood.
+function model = learning_dvine_ml(params, population, fitness)
+  % Learn a D-vine from a population using maximum likelihood.
   %
   % PARAMS is a struct with the parameters of the EDA. PUPULATION is the
   % population from where the probabilistic model should be learned and
-  % EVALUATION is the evaluation of the individuals of this popualtion.
+  % FITNESS is the fitness of the individuals of this popualtion.
   %
   % A D-vine is defined by an ordering of the variables and the parameters of
   % each copula density in the factorization. The output variable MODEL will be
-  % an struct with two fields: "ordering", a vector for the order of the
-  % variables and "parameters", a matrix with the parameters of each copula.
+  % an struct with two fields: ordering, a vector for the order of the
+  % variables and parameters, a cell array with the parameters of each copula.
   %
-  % See the following for more information:
+  % References:
   %
   % K. Aas, C. Czado, A. Frigessi, and H. Bakken. Pair-copula constructions of
   % multiple dependence. Note SAMBA/24/06, Norwegian Computing Center, NR, 2006.
@@ -33,7 +33,8 @@ function [model] = learning_dvine_ml(params, population, evaluation)
   uniform_pop = zeros(num_individuals, num_vars);
   marginal_cdf = params.learning_params.marginal_cdf;
   for k = 1:num_vars
-    uniform_pop(:,k) = feval(marginal_cdf, population(:,ordering(k)), ...
+    uniform_pop(:,k) = feval(marginal_cdf, ...
+                             population(:,ordering(k)), ...
                              population(:,ordering(k)));
   end
   
@@ -41,18 +42,17 @@ function [model] = learning_dvine_ml(params, population, evaluation)
   % the numerical maximization of the log-likelihood function.
   copula_fit = params.learning_params.copula_fit;
   h_function = params.learning_params.h_function;
-  parameters = dvine_starting_parameters(uniform_pop, copula_fit, h_function);
+  parameters = starting_parameters(uniform_pop, copula_fit, h_function);
   
-  % Run a local optimization method for the log-likehood function.
+  % Run a local optimization method for the log-likehood.
   
-  % Set the fields of the model.
+  % Set the information of the model.
   model = struct();
   model.ordering = ordering;
   model.parameters = parameters;
 end
 
-function parameters = dvine_starting_parameters(uniform_pop, ...
-                                                copula_fit, h_function)
+function parameters = starting_parameters(uniform_pop, copula_fit, h_function)
   % Calculate starting parameters of the copulas in a D-vine.
   
   % WARNING: The way the first dimension of v is indexed here differs from the
@@ -60,7 +60,6 @@ function parameters = dvine_starting_parameters(uniform_pop, ...
   
   n = size(uniform_pop, 2);
   v = cell(n, n);
-  
   parameters = cell(n, n);
 
   for i = 1:n

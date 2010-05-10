@@ -1,4 +1,4 @@
-function [params] = parameters_dvine_ml()  
+function params = parameters_dvine_ml()  
   params = struct();
 
   params.note = 'D-vine estimated by maximum likelihood.';

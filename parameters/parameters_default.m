@@ -1,4 +1,4 @@
-function [params] = parameters_default()  
+function params = parameters_default()  
   params = struct();
 
   % GENERAL PARAMETERS OF THE EXECUTION.
@@ -70,8 +70,8 @@ function [params] = parameters_default()
   
   params.termination_params = struct();
   
-  % Maximum number of generations and the error tolerance when checking the
-  % evaluation of the objective function against the known optimum.
+  % Maximum number of generations and the error tolerance comparing the
+  % evaluation of the objective function with the known optimum.
   params.termination_params.max_generations = 10;
   params.termination_params.error_tolerance = 1e-7;
   
