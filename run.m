@@ -134,13 +134,13 @@ function run(parameters)
     fprintf('\nGlobal statistics (mean and standard deviation):\n');
     if isfield(params.objective_params, 'optimum')
       fprintf('  Success: %f (%f)\n', mean(run_success), std(run_success));
-      fprintf('  Errors: %f (%f)\n', mean(run_errors), std(run_errors));
+      fprintf('  Errors: %g (%g)\n', mean(run_errors), std(run_errors));
     end
     fprintf('  Number generations: %f (%f)\n', ...
             mean(run_generations), std(run_generations));
     fprintf('  Number evaluations: %f (%f)\n', ...
             mean(run_evaluations), std(run_evaluations));
-    fprintf('  Best fitness: %f (%f)\n', ...
+    fprintf('  Best fitness: %g (%g)\n', ...
             mean(run_fitness), std(run_fitness));
     fprintf('  Runtime: %f seconds (%f)\n', mean(run_time), std(run_time));
 
