@@ -16,20 +16,21 @@ function run(parameters)
   
   % Vectors to collect statistics of all the runs.
   run_success = nan(params.runs, 1);
-  num_generations = nan(params.runs, 1);
-  num_evaluations = nan(params.runs, 1);
-  best_fitness = nan(params.runs, 1);
+  run_errors = nan(params.runs, 1);
+  run_generations = nan(params.runs, 1);
+  run_evaluations = nan(params.runs, 1);
+  run_fitness = nan(params.runs, 1);
   run_time = nan(params.runs, 1);
  
   for run = 1:params.runs
     tic();
 
     % Initialize statistics for this run.
-    num_generations(run) = 1;
-    num_evaluations(run) = 0;
+    run_generations(run) = 1;
+    run_evaluations(run) = 0;
     
     while true 
-      if num_generations(run) == 1
+      if run_generations(run) == 1
         % Execute the seeding method. Seeding methods are used to initialize the
         % first population used in the execution of the algorithm.
         sampled_population = feval(params.seeding, params);
@@ -43,7 +44,7 @@ function run(parameters)
       % Evaluate the population in the objective function.
       sampled_fitness = feval(params.objective, params, sampled_population);
 
-      if num_generations(run) > 1
+      if run_generations(run) > 1
         % Execute the replacing method. Replacing methods are used to combine
         % the individuals sampled in the current generation with the individuals
         % of the previous generation. It can be used to implement elitism.
@@ -55,7 +56,7 @@ function run(parameters)
         % information about the evolution of the population.
         if ~params.quiet
           for i = 1:numel(params.verbose)
-            feval(params.verbose{i}, params, num_generations(run), ...
+            feval(params.verbose{i}, params, run_generations(run), ...
                   population, fitness, selected_population, selected_fitness, ...
                   sampled_population, sampled_fitness);
           end
@@ -67,10 +68,10 @@ function run(parameters)
       
       % Update the statistics of this run.
       best_current = min(fitness);
-      if isnan(best_fitness(run)) || best_current < best_fitness(run)
-        best_fitness(run) = best_current;
+      if isnan(run_fitness(run)) || best_current < run_fitness(run)
+        run_fitness(run) = best_current;
       end
-      num_evaluations(run) = num_evaluations(run) + ...
+      run_evaluations(run) = run_evaluations(run) + ...
                              params.seeding_params.population_size;
       
       % Evaluate the termination conditions. The termination condition is
@@ -79,7 +80,7 @@ function run(parameters)
       terminate = false;
       for i = 1:numel(params.termination)
         terminate = feval(params.termination{i}, params, ...
-                          num_generations(run), num_evaluations(run), ...
+                          run_generations(run), run_evaluations(run), ...
                           population, fitness);
         if terminate
           % Break the loop executing termination conditions.
@@ -105,16 +106,17 @@ function run(parameters)
       % Prepare for the next generation.
       previous_population = population;
       previous_fitness = fitness;
-      num_generations(run) = num_generations(run) + 1;
+      run_generations(run) = run_generations(run) + 1;
     end
     
     % Current run is finished.
     
     % Update the statistics of this run.
     run_time(run) = toc();
-    if ~isnan(params.objective_params.optimum)
+    if isfield(params.objective_params, 'optimum')
       tolerance = params.termination_params.error_tolerance;
-      if abs(params.objective_params.optimum - best_fitness(run)) <= tolerance
+      run_errors(run) = abs(params.objective_params.optimum - run_fitness(run));
+      if run_errors(run) <= tolerance
         run_success(run) = true;
       else
         run_success(run) = false;
@@ -123,22 +125,23 @@ function run(parameters)
     
     if ~params.quiet
       msg = '\nRun %d of %d stoped at generation %d Time: %f seconds\n\n';
-      fprintf(msg, run, params.runs, num_generations(run), run_time(run));
+      fprintf(msg, run, params.runs, run_generations(run), run_time(run));
     end
   end
 
   % Print global statistics for all runs.
   if ~params.quiet
     fprintf('\nGlobal statistics (mean and standard deviation):\n');
-    if ~isnan(params.objective_params.optimum)
+    if isfield(params.objective_params, 'optimum')
       fprintf('  Success: %f (%f)\n', mean(run_success), std(run_success));
+      fprintf('  Errors: %f (%f)\n', mean(run_errors), std(run_errors));
     end
     fprintf('  Number generations: %f (%f)\n', ...
-            mean(num_generations), std(num_generations));
+            mean(run_generations), std(run_generations));
     fprintf('  Number evaluations: %f (%f)\n', ...
-            mean(num_evaluations), std(num_evaluations));
+            mean(run_evaluations), std(run_evaluations));
     fprintf('  Best fitness: %f (%f)\n', ...
-            mean(best_fitness), std(best_fitness));
+            mean(run_fitness), std(run_fitness));
     fprintf('  Runtime: %f seconds (%f)\n', mean(run_time), std(run_time));
 
     fprintf('\n\nExecution finished at: %s\n', datestr(now(), 31));

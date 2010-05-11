@@ -29,8 +29,7 @@ function params = parameters_default()
   params.objective_params.lower_bounds = repmat(-5.12, 1, n);
   params.objective_params.upper_bounds = repmat(5.12, 1, n);
   
-  % Optimum individual and optimum value of the function. This parameters 
-  % should be set to NaN if the are not known.
+  % Optimum individual and optimum value of the function.
   params.objective_params.optimum = 0;
   params.objective_params.optimum_individual = repmat(0, 1, n);
 

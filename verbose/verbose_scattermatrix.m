@@ -18,7 +18,7 @@ function verbose_scattermatrix(params, generation, population, fitness, ...
     ylabel(axes_handles(k,1), sprintf('x_{%i}', k));
     xlabel(axes_handles(end,k), sprintf('x_{%i}', k));
   end
-  if ~isnan(params.objective_params.optimum_individual)
+  if isfield(params.objective_params, 'optimum_individual')
     for i = 1:size(axes_handles,2)
       for j = 1:size(axes_handles,1)
         if i ~= j

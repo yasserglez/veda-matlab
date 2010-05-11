@@ -5,22 +5,28 @@ function verbose_scatter(params, generation, population, fitness, ...
   %
   % This will create bivariate scatter plots for the given variables in the
   % current, selected and simulated populations. The variables are selected
-  % by its indexes using the PARAMS.verbose_params.x_index and
-  % PARAMS.verbose_params.y_index parameters. If the optimum of the function
-  % is known, it also includes in the scatter plot a point for the variables
-  % of PARAMS.objective_params.optimum_individual.
+  % by its indexes using the PARAMS.verbose_params.x_index (1 by default) and
+  % PARAMS.verbose_params.y_index (2 by default) parameters. If the optimum of
+  % the function is known, it also includes in the scatter plot a point for the
+  % variables of PARAMS.objective_params.optimum_individual.
   
   % Created by Raúl José Arderí García (2007).
   % Modified by Yasser González Fernández (2010).
   
-  x_index = params.verbose_params.x_index;
-  y_index = params.verbose_params.y_index;
+  if (isfield(params.verbose_params, 'x_index') && ...
+      isfield(params.verbose_params, 'y_index'))
+      x_index = params.verbose_params.x_index;
+      y_index = params.verbose_params.y_index;
+  else
+      x_index = 1;
+      y_index = 2;
+  end
   
   lower_bounds = params.objective_params.lower_bounds;
   upper_bounds = params.objective_params.upper_bounds;
   x_lim = [lower_bounds(x_index), upper_bounds(x_index)];
   y_lim = [lower_bounds(y_index), upper_bounds(y_index)];  
-  optimum_known = ~isnan(params.objective_params.optimum_individual);
+  optimum_known = isfield(params.objective_params, 'optimum_individual');
   if optimum_known
     x_optimum = params.objective_params.optimum_individual(1,x_index);
     y_optimum = params.objective_params.optimum_individual(1,y_index);

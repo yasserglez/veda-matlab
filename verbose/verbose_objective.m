@@ -47,7 +47,7 @@ function verbose_objective(params, generation, population, fitness, ...
   zlabel('f(x,y)');
   
   % Plot a marker for the optimum individual (if known).
-  if ~isnan(params.objective_params.optimum_individual)
+  if isfield(params.objective_params, 'optimum_individual')
     hold('on');
     x_optimum = params.objective_params.optimum_individual(1,1);
     y_optimum = params.objective_params.optimum_individual(1,2);
