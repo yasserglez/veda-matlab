@@ -3,9 +3,8 @@ function population = ...
   % Sample a canonical vine learned from a population.
   %
   % PARAMS is a struct with the parameters of the EDA. MODEL is a struct
-  % representing the canonical vine, it should have two fields: ordering, a
-  % vector for the order of the variables and parameters, a matrix with 
-  % the parameters of each copula in the pair-copula decomposition.
+  % representing the canonical vine, see the documentation of the
+  % learning_cvine_ml function for information about the fields.
   % SELECTED_POPULATION is the population from where the canonical vine was
   % learned and SELECTED_FITNESS its evaluation.
   %
@@ -24,12 +23,15 @@ function population = ...
   
   % Simulate a population of dependent Uniform(0,1) variables variables) from
   % the given canonical vine.
-    
+
   pop_size = params.seeding_params.population_size;
   n = params.objective_params.number_variables;
-  h_inverse = params.sampling_params.h_inverse;
-  h_function = params.sampling_params.h_function;
-  parameters = model.parameters;
+  cdf_inverse = params.sampling_params.marginal_cdf_inverse;
+  
+  order = model.order;
+  theta = model.theta;
+  h_functions = model.h_functions;
+  h_inverses = model.h_inverses;
 
   uniform_pop = zeros(pop_size, n);
   W = unifrnd(0, 1, pop_size, n);
@@ -44,14 +46,14 @@ function population = ...
       % Sampling the ith variable.
       v(i,1) = w(i);
       for k = i-1:-1:1
-        v(i,1) = feval(h_inverse, v(i,1), v(k,k), parameters{k,i-k});
+        v(i,1) = feval(h_inverses{k,i-k}, v(i,1), v(k,k), theta{k,i-k});
       end
       uniform_pop(individual,i) = v(i,1);
       
       % Compute the h-inverse values needed for sampling the (i+1)th variable.
       if i ~= n
         for j = 1:i-1
-          v(i,j+1) = feval(h_function, v(i,j), v(j,j), parameters{j,i-j});
+          v(i,j+1) = feval(h_functions{j,i-j}, v(i,j), v(j,j), theta{j,i-j});
         end
       end
     end
@@ -61,13 +63,9 @@ function population = ...
   % variables of the objective function applying the inverse of the univariate
   % marginal CDFs to each observation of each variable in the population.
   
-  cdf_inverse = params.sampling_params.marginal_cdf_inverse;
-  ordering = model.ordering;
-  
   population = zeros(pop_size, n);
   for k = 1:n
-    population(:,ordering(k)) = feval(cdf_inverse, ...
-                                      selected_population(:,ordering(k)), ...
-                                      uniform_pop(:,k));
+    population(:,order(k)) = ...
+      feval(cdf_inverse, selected_population(:,order(k)), uniform_pop(:,k));
   end
 end

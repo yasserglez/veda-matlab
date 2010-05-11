@@ -22,23 +22,25 @@ function params = parameters_cvine_ml()
   % Uniformly select a random ordering of the variables.
   params.learning_params.random_ordering = false;
   
+  % Number of trees of the cannonical vine that will represent dependence and
+  % conditional dependence between the variables and assume conditional
+  % independence for the rest of the trees (assigning the product copula).
+  params.learning_params.max_trees = 4;
+  
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
   params.learning_params.marginal_cdf = 'cdf_gaussian';
   
   % A function that estimates the parameters of a bivariate copula from a column
   % vector of observations for each variable.
-  params.learning_params.copula_fit = 'copulafit_gaussian_kendall';
+  params.learning_params.copulafit = 'copulafit_gaussian_kendall';
   
-  % h-function of the copulas used in the decomposition.
+  % h-functions of the copula used in the decomposition.
   params.learning_params.h_function = 'h_gaussian';
+  params.learning_params.h_inverse = 'hinv_gaussian';
   
   params.sampling = 'sampling_cvine';
-  params.sampling_params = struct(); 
-  
-  % h-function and inverse of the copulas used in the decomposition. 
-  params.sampling_params.h_function = 'h_gaussian';
-  params.sampling_params.h_inverse = 'hinv_gaussian';
+  params.sampling_params = struct();  
   
   % A function that evaluates the inverse of the marginal CDF of a variable of
   % the population in a column vector of values of the CDF.
