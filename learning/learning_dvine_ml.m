@@ -85,7 +85,8 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   end
   
   for i = 1:n-1
-    if isnan(max_trees) || 1 <= max_trees
+    t = (isnan(max_trees) || 1 <= max_trees);
+    if t && kendall_corr_test(v{1,i}, v{1,i+1})
       theta{1,i} = feval(copulafit, v{1,i}, v{1,i+1});
       h_functions{1,i} = str2func(h_function);
       h_inverses{1,i} = str2func(h_inverse);
@@ -105,7 +106,8 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
                            
   for j = 2:n-1
     for i = 1:n-j
-      if isnan(max_trees) || j <= max_trees
+      t = (isnan(max_trees) || j <= max_trees);
+      if t && kendall_corr_test(v{j,2*i-1}, v{j,2*i})
         theta{j,i} = feval(copulafit, v{j,2*i-1}, v{j,2*i});
         h_functions{j,i} = str2func(h_function);
         h_inverses{j,i} = str2func(h_inverse);
