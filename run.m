@@ -1,4 +1,4 @@
-function run(parameters)
+function run_stats = run(parameters)
   % Run an Estimation of Distribution Algorithm.
   %
   % PARAMETERS is a struct that defines the parameters of the Estimation of
@@ -6,7 +6,7 @@ function run(parameters)
 
   % Created by Yasser González Fernández (2010).
   
-  init_environment();
+  init_env();
   params = feval(parameters);
 
   if ~params.quiet
@@ -146,10 +146,21 @@ function run(parameters)
 
     fprintf('\n\nExecution finished at: %s\n', datestr(now(), 31));
   end
+  
+  % Return the statistics.
+  if nargout ~= 0
+    run_stats = struct();
+    run_stats.success = run_success;
+    run_stats.errors = run_errors;
+    run_stats.generations = run_generations;
+    run_stats.evaluations = run_evaluations;
+    run_stats.fitness = run_fitness;
+    run_stats.time = run_time;
+  end
 end
 
-function init_environment()
-  % Initialize the environment required to run the run_eda function.
+function init_env()
+  % Initialize the environment required to run the function.
   
   eda_path = genpath(pwd());
   addpath(eda_path);
