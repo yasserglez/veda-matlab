@@ -6,7 +6,7 @@ function run_stats = run(parameters)
 
   % Created by Yasser González Fernández (2010).
   
-  init_env();
+  update_path();
   params = feval(parameters);
 
   if ~params.quiet
@@ -131,7 +131,7 @@ function run_stats = run(parameters)
 
   % Print global statistics for all runs.
   if ~params.quiet
-    fprintf('\nGlobal statistics (mean and standard deviation):\n');
+    fprintf('\nGlobal statistics (mean and standard deviation):\n\n');
     if isfield(params.objective_params, 'optimum')
       fprintf('  Success: %f (%f)\n', mean(run_success), std(run_success));
       fprintf('  Errors: %g (%g)\n', mean(run_errors), std(run_errors));
@@ -159,9 +159,7 @@ function run_stats = run(parameters)
   end
 end
 
-function init_env()
-  % Initialize the environment required to run the function.
-  
+function update_path() 
   eda_path = genpath(pwd());
   addpath(eda_path);
 end
