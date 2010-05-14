@@ -1,10 +1,10 @@
-function params = parameters_default()  
+function params = parameters_general()  
   params = struct();
 
   % GENERAL PARAMETERS OF THE EXECUTION.
 
   % A note that will be printed as part of the output of the algorithm.
-  params.note = 'Default EDA';
+  params.note = 'General parameters';
 
   % The algorithm will run this number of times.
   params.runs = 1;
