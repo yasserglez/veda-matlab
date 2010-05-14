@@ -1,4 +1,4 @@
-function critical_population(parameters, left, right, r, p)
+function criticalpop(parameters, left, right, r, p)
   % Find the minimum population size required by an algorithm.
   %
   % Find the minimum population size required by the algorithm identified by the 
@@ -8,7 +8,7 @@ function critical_population(parameters, left, right, r, p)
   
   % Created by Yasser González Fernández (2010).
   
-  update_path();
+  initenv();
   
   params = feval(parameters);
   params.runs = r;
@@ -21,7 +21,7 @@ function critical_population(parameters, left, right, r, p)
     
     fprintf('Running %d runs with population size %d\n\n', ...
             r, params.seeding_params.population_size);
-    middle_stats = run(@() params);
+    middle_stats = runeda(@() params);
     middle_p = mean(middle_stats.success);
     fprintf('\nProbability in %d runs with population size %d: %f\n', ...
             r, params.seeding_params.population_size, middle_p);
