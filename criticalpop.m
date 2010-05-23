@@ -21,19 +21,21 @@ function criticalpop(parameters, left, right, r, p)
     middle = round((left + right) / 2);
     params.seeding_params.population_size = middle;
     
-    fprintf('Running with population size %d...', middle);
-    
     stats = NaN;
     num_fails = 0;
     num_success = 0;
     while (num_success + num_fails) < r
+      fprintf('Run #%d with population size %d...', ...
+              num_success + num_fails + 1, middle);
       run_stats = runeda(@() params);
       if run_stats.success == 0
+        fprintf('FAILED!\n');
         num_fails = num_fails + 1;
         if (num_fails / r) > (1 - p)
           break;
         end
       else
+        fprintf('OK!\n');
         num_success = num_success + 1;
       end
       if isstruct(stats)
@@ -49,9 +51,7 @@ function criticalpop(parameters, left, right, r, p)
     end
     
     if (num_fails / r) <= (1 - p)
-      fprintf('OK!\n\n');
-
-      fprintf('Global statistics (mean and standard deviation):\n\n');
+      fprintf('\nGlobal statistics in %d runs:\n\n', r);
       fprintf('  Success: %f (%f)\n', mean(stats.success), std(stats.success));
       fprintf('  Errors: %g (%g)\n', mean(stats.errors), std(stats.errors));
       fprintf('  Number generations: %f (%f)\n', ...
@@ -60,10 +60,12 @@ function criticalpop(parameters, left, right, r, p)
               mean(stats.evaluations), std(stats.evaluations));
       fprintf('  Best fitness: %g (%g)\n', ...
               mean(stats.fitness), std(stats.fitness));
+      fprintf('  Run time: %g secs. (%g)\n', ...
+              mean(stats.time), std(stats.time));            
             
       right = middle;
     else
-      fprintf('FAILED!\n');
+      fprintf('\nThe population size %d is too small.\n', middle);
 
       left = middle;
     end
