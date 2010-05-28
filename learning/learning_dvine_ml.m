@@ -26,6 +26,9 @@ function model = learning_dvine_ml(params, population, fitness)
   
   pop_size = size(population, 1);
   num_vars = size(population, 2);
+  if ~isfield(params.learning_params, 'max_trees')
+    params.learning_params.max_trees = num_vars - 1;
+  end  
   
   % Select an ordering of the variables.
   if params.learning_params.random_ordering
@@ -55,6 +58,7 @@ function model = learning_dvine_ml(params, population, fitness)
   model.theta = theta;
   model.h_functions = h_functions;
   model.h_inverses = h_inverses;
+  model.max_trees = params.learning_params.max_trees;  
 end
 
 function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
@@ -66,17 +70,13 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   copulafit = params.learning_params.copulafit;  
   h_function = params.learning_params.h_function;
   h_inverse = params.learning_params.h_inverse;
-  if isfield(params.learning_params, 'max_trees')
-    max_trees = params.learning_params.max_trees;
-  else
-    max_trees = NaN;
-  end
+  max_trees = params.learning_params.max_trees;
   
   n = size(uniform_pop, 2);
 
   theta = cell(n, n);
   h_functions = cell(n, n);
-  h_inverses = cell(n, n);  
+  h_inverses = cell(n, n);
   
   v = cell(n, n);
 
@@ -85,8 +85,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   end
   
   for i = 1:n-1
-    t = (isnan(max_trees) || 1 <= max_trees);
-    if t && kendall_corr_test(v{1,i}, v{1,i+1})
+    if kendall_corr_test(v{1,i}, v{1,i+1})
       theta{1,i} = feval(copulafit, v{1,i}, v{1,i+1});
       h_functions{1,i} = str2func(h_function);
       h_inverses{1,i} = str2func(h_inverse);
@@ -104,10 +103,9 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   end
   v{2,2*n-4} = feval(h_functions{1,n-1}, v{1,n}, v{1,n-1}, theta{1,n-1});
                            
-  for j = 2:n-1
+  for j = 2:max_trees
     for i = 1:n-j
-      t = (isnan(max_trees) || j <= max_trees);
-      if t && kendall_corr_test(v{j,2*i-1}, v{j,2*i})
+      if kendall_corr_test(v{j,2*i-1}, v{j,2*i})
         theta{j,i} = feval(copulafit, v{j,2*i-1}, v{j,2*i});
         h_functions{j,i} = str2func(h_function);
         h_inverses{j,i} = str2func(h_inverse);
@@ -119,7 +117,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
     end
     
     % Compute observations for the next tree.
-    if j ~= n-1
+    if j ~= max_trees
       v{j+1,1} = feval(h_functions{j,1}, v{j,1}, v{j,2}, theta{j,1});
       if n > 4
         for i = 1:n-j-2
