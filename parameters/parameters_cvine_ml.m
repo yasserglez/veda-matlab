@@ -24,7 +24,7 @@ function params = parameters_cvine_ml()
   
   % Number of trees of the cannonical vine that will represent dependence and
   % conditional dependence between the variables and assume conditional
-  % independence for the rest of the trees (assigning the product copula).
+  % independence for the rest of the trees.
   params.learning_params.max_trees = 4;
   
   % A function that evaluates the marginal CDF of a variable of the population

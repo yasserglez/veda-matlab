@@ -39,6 +39,7 @@ function stats = runeda(parameters)
         % new population from the probabilistic model learned by the EDA.
         sampled_population = feval(params.sampling, params, model, ...
                                    selected_population, selected_fitness);
+                                 
       end
 
       % Evaluate the population in the objective function.

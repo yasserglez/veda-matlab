@@ -16,6 +16,8 @@ function model = learning_cvine_ml(params, population, fitness)
   %     bivariate copula in the pair-copula decomposition,
   %   * h_inverses: cell array with the inverse of the h-functions corresponding
   %     to each bivariate copula in the pair-copula decomposition.
+  %   * max_trees: maximum number of trees in the canonical vine (for the rest
+  %     of the trees the variables are assumed to be independent).  
   %
   % References:
   %
@@ -26,6 +28,9 @@ function model = learning_cvine_ml(params, population, fitness)
   
   pop_size = size(population, 1);
   num_vars = size(population, 2);
+  if ~isfield(params.learning_params, 'max_trees')
+    params.learning_params.max_trees = num_vars - 1;
+  end
   
   % Select an ordering of the variables.
   if params.learning_params.random_ordering
@@ -55,6 +60,7 @@ function model = learning_cvine_ml(params, population, fitness)
   model.theta = theta;
   model.h_functions = h_functions;
   model.h_inverses = h_inverses;
+  model.max_trees = params.learning_params.max_trees;
 end
 
 function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
@@ -66,11 +72,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   copulafit = params.learning_params.copulafit;  
   h_function = params.learning_params.h_function;
   h_inverse = params.learning_params.h_inverse;
-  if isfield(params.learning_params, 'max_trees')
-    max_trees = params.learning_params.max_trees;
-  else
-    max_trees = NaN;
-  end
+  max_trees = params.learning_params.max_trees;
   
   n = size(uniform_pop, 2);
 
@@ -84,10 +86,9 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
     v{1,i} = uniform_pop(:,i);
   end
 
-  for j = 1:n-1
+  for j = 1:max_trees
     for i = 1:n-j
-      t = (isnan(max_trees) || j <= max_trees);
-      if t && kendall_corr_test(v{j,1}, v{j,i+1})
+      if kendall_corr_test(v{j,1}, v{j,i+1})
         theta{j,i} = feval(copulafit, v{j,1}, v{j,i+1});
         h_functions{j,i} = str2func(h_function);
         h_inverses{j,i} = str2func(h_inverse);
@@ -98,7 +99,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
       end
     end
 
-    if j ~= n-1
+    if j ~= max_trees
       % Compute observations for the next tree.
       for i = 1:n-j
         v{j+1,i} = feval(h_functions{j,i}, v{j,i+1}, v{j,1}, theta{j,i});
