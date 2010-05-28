@@ -6,7 +6,7 @@ function stats = runeda(parameters)
 
   % Created by Yasser González Fernández (2010).
   
-  initenv();
+  init();
   params = feval(parameters);
 
   if ~params.quiet

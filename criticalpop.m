@@ -8,7 +8,7 @@ function criticalpop(parameters, left, right, r, p)
   
   % Created by Yasser González Fernández (2010).
   
-  initenv();
+  init();
   
   params = feval(parameters);
   params.runs = 1;
@@ -37,22 +37,22 @@ function criticalpop(parameters, left, right, r, p)
       else
         fprintf('OK!\n');
         num_success = num_success + 1;
-      end
-      if isstruct(stats)
-        stats.success = [stats.success, run_stats.success];
-        stats.errors = [stats.errors, run_stats.errors];
-        stats.generations = [stats.generations, run_stats.generations];
-        stats.evaluations = [stats.evaluations, run_stats.evaluations];
-        stats.fitness = [stats.fitness, run_stats.fitness];
-        stats.time = [stats.time, run_stats.time];
-      else
-        stats = run_stats;
+        if isstruct(stats)
+          stats.success = [stats.success, run_stats.success];
+          stats.errors = [stats.errors, run_stats.errors];
+          stats.generations = [stats.generations, run_stats.generations];
+          stats.evaluations = [stats.evaluations, run_stats.evaluations];
+          stats.fitness = [stats.fitness, run_stats.fitness];
+          stats.time = [stats.time, run_stats.time];
+        else
+          stats = run_stats;
+        end
       end
     end
     
     if (num_fails / r) <= (1 - p)
       fprintf('\nGlobal statistics in %d runs:\n\n', r);
-      fprintf('  Success: %f (%f)\n', mean(stats.success), std(stats.success));
+      fprintf('  Success: %f\n', num_success / r);
       fprintf('  Errors: %g (%g)\n', mean(stats.errors), std(stats.errors));
       fprintf('  Number generations: %f (%f)\n', ...
               mean(stats.generations), std(stats.generations));

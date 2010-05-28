@@ -1,4 +1,4 @@
-function initenv()
+function init()
   % Initialize the environment required to run the EDA.
   
   eda_path = genpath(pwd());
