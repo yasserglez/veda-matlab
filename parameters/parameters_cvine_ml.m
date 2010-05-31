@@ -7,7 +7,7 @@ function params = parameters_cvine_ml()
 
   params.objective = 'objective_sphere';
   params.objective_params = struct();
-  params.objective_params.number_variables = 3;
+  params.objective_params.number_variables = 2;
   n = params.objective_params.number_variables;
   params.objective_params.lower_bounds = repmat(-5.12, 1, n);
   params.objective_params.upper_bounds = repmat(5.12, 1, n);
@@ -33,7 +33,7 @@ function params = parameters_cvine_ml()
   
   % A function that estimates the parameters of a bivariate copula from a column
   % vector of observations for each variable.
-  params.learning_params.copulafit = 'copulafit_gaussian_kendall';
+  params.learning_params.fitcopula = 'fitcopula_gaussian_kendall';
   
   % h-functions of the copula used in the decomposition.
   params.learning_params.h_function = 'h_gaussian';
@@ -62,6 +62,6 @@ function params = parameters_cvine_ml()
   params.selection_params = struct();
   params.selection_params.truncation_coefficient = 0.3;
 
-  params.verbose = {'verbose_none'};
+  params.verbose = {'verbose_simple'};
   params.verbose_params = struct();
 end

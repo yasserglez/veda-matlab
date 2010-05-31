@@ -69,7 +69,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   % WARNING: The way the first dimension of v is indexed here differs from the
   % Algorithm 3 in SAMBA/24/06 because of MATLAB 1-based indexing.
   
-  copulafit = params.learning_params.copulafit;  
+  fitcopula = params.learning_params.fitcopula;  
   h_function = params.learning_params.h_function;
   h_inverse = params.learning_params.h_inverse;
   max_trees = params.learning_params.max_trees;
@@ -89,7 +89,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   for j = 1:max_trees
     for i = 1:n-j
       if kendall_corr_test(v{j,1}, v{j,i+1})
-        theta{j,i} = feval(copulafit, v{j,1}, v{j,i+1});
+        theta{j,i} = feval(fitcopula, v{j,1}, v{j,i+1});
         h_functions{j,i} = str2func(h_function);
         h_inverses{j,i} = str2func(h_inverse);
       else
