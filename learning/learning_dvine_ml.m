@@ -5,11 +5,11 @@ function model = learning_dvine_ml(params, population, fitness)
   % population from where the probabilistic model should be learned and
   % FITNESS is the fitness of the individuals of this popualtion.
   %
-  % A D-vine is defined by an order of the variables and the parameters of
+  % A D-vine is defined by an ordering of the variables and the parameters of
   % each copula density in the factorization. The output variable MODEL will be
   % an struct with the following fields:
   %
-  %   * order: vector with the order of the variables,
+  %   * ordering: vector with the order of the variables,
   %   * theta: cell array with the parameters of each bivariate copula in the
   %     pair-copula decomposition,
   %   * h_functions: cell array with the h-functions corresponding to each
@@ -31,11 +31,7 @@ function model = learning_dvine_ml(params, population, fitness)
   end  
   
   % Select an ordering of the variables.
-  if params.learning_params.random_ordering
-    order = randperm(num_vars);
-  else
-    order = 1:num_vars;
-  end
+  ordering = feval(params.learning_params.ordering, population);
   
   % Transform the population into an Uniform(0,1) population applying the
   % univariate marginal CDFs to each observation of each variable in the
@@ -43,7 +39,8 @@ function model = learning_dvine_ml(params, population, fitness)
   uniform_pop = zeros(pop_size, num_vars);
   for k = 1:num_vars
     uniform_pop(:,k) = feval(params.learning_params.marginal_cdf, ...
-                             population(:,order(k)), population(:,order(k)));
+                             population(:,ordering(k)), ...
+                             population(:,ordering(k)));
   end
   
   % Calculate the starting values for the parameters of the copulas needed
@@ -54,7 +51,7 @@ function model = learning_dvine_ml(params, population, fitness)
   
   % Set the information of the model.
   model = struct();
-  model.order = order;
+  model.ordering = ordering;
   model.theta = theta;
   model.h_functions = h_functions;
   model.h_inverses = h_inverses;
@@ -70,7 +67,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   fitcopula = params.learning_params.fitcopula;  
   h_function = params.learning_params.h_function;
   h_inverse = params.learning_params.h_inverse;
-  max_trees = params.learning_params.max_trees;
+  max_trees = min(params.learning_params.max_trees, size(uniform_pop, 2) - 1);
   
   n = size(uniform_pop, 2);
 
@@ -131,4 +128,10 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
                                v{j,2*n-2*j-1}, theta{j,n-j});
     end
   end
+end
+
+function ordering = ordering_default(population)
+  % Select an ordering of the variables in a D-vine.
+
+  ordering = 1:size(population, 2);
 end

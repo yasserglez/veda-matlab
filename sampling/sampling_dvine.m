@@ -28,7 +28,7 @@ function population = ...
   n = params.objective_params.number_variables;
   cdf_inverse = params.sampling_params.marginal_cdf_inverse;
   
-  order = model.order;
+  ordering = model.ordering;
   theta = model.theta;
   h_functions = model.h_functions;
   h_inverses = model.h_inverses;
@@ -81,7 +81,7 @@ function population = ...
   
   population = zeros(pop_size, n);
   for k = 1:n
-    population(:,order(k)) = ...
-      feval(cdf_inverse, selected_population(:,order(k)), uniform_pop(:,k));
+    population(:,ordering(k)) = ...
+      feval(cdf_inverse, selected_population(:,ordering(k)), uniform_pop(:,k));
   end
 end

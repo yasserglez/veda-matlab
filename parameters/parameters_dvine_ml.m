@@ -7,7 +7,7 @@ function params = parameters_dvine_ml()
 
   params.objective = 'objective_sphere';
   params.objective_params = struct();
-  params.objective_params.number_variables = 2;
+  params.objective_params.number_variables = 3;
   n = params.objective_params.number_variables;
   params.objective_params.lower_bounds = repmat(-5.12, 1, n);
   params.objective_params.upper_bounds = repmat(5.12, 1, n);
@@ -19,8 +19,8 @@ function params = parameters_dvine_ml()
   params.learning = 'learning_dvine_ml';
   params.learning_params = struct();
   
-  % Uniformly select a random ordering of the variables.
-  params.learning_params.random_ordering = false;
+  % Method used to select an ordering of the variables.
+  params.learning_params.ordering = 'ordering_default';
   
   % Number of trees of the D-vine that will represent dependence and
   % conditional dependence between the variables and assume conditional

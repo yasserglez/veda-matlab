@@ -7,9 +7,9 @@ function model = learning_cvine_ml(params, population, fitness)
   %
   % A canonical vine is defined by an ordering of the variables and the
   % parameters of each copula density in the factorization. The output variable
-  % MODEL will be an struct with the following fields: 
+  % MODEL will be an struct with the following fields:
   %
-  %   * order: vector with the ordering of the variables,
+  %   * ordering: vector with the ordering of the variables,
   %   * theta: cell array with the parameters of each bivariate copula in the
   %     pair-copula decomposition,
   %   * h_functions: cell array with the h-functions corresponding to each
@@ -17,46 +17,43 @@ function model = learning_cvine_ml(params, population, fitness)
   %   * h_inverses: cell array with the inverse of the h-functions corresponding
   %     to each bivariate copula in the pair-copula decomposition.
   %   * max_trees: maximum number of trees in the canonical vine (for the rest
-  %     of the trees the variables are assumed to be independent).  
+  %     of the trees the variables are assumed to be independent).
   %
   % References:
   %
   % K. Aas, C. Czado, A. Frigessi, and H. Bakken. Pair-copula constructions of
   % multiple dependence. Note SAMBA/24/06, Norwegian Computing Center, NR, 2006.
-  
-  % Created by Yasser González Fernández (2010).  
-  
+
+  % Created by Yasser González Fernández (2010).
+
   pop_size = size(population, 1);
   num_vars = size(population, 2);
   if ~isfield(params.learning_params, 'max_trees')
     params.learning_params.max_trees = num_vars - 1;
   end
-  
+
   % Select an ordering of the variables.
-  if params.learning_params.random_ordering
-    order = randperm(num_vars);
-  else
-    order = 1:num_vars;
-  end
-  
+  ordering = feval(params.learning_params.ordering, population);
+
   % Transform the population into an Uniform(0,1) population applying the
   % univariate marginal CDFs to each observation of each variable in the
   % population.
   uniform_pop = zeros(pop_size, num_vars);
   for k = 1:num_vars
     uniform_pop(:,k) = feval(params.learning_params.marginal_cdf, ...
-                             population(:,order(k)), population(:,order(k)));
+                             population(:,ordering(k)), ...
+                             population(:,ordering(k)));
   end
-  
+
   % Calculate the starting values for the parameters of the copulas needed
   % for the numerical maximization of the log-likelihood function.
   [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop);
-  
+
   % Run a local optimization method for the log-likehood.
-  
+
   % Set the information of the model.
   model = struct();
-  model.order = order;
+  model.ordering = ordering;
   model.theta = theta;
   model.h_functions = h_functions;
   model.h_inverses = h_inverses;
@@ -65,21 +62,21 @@ end
 
 function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   % Calculate starting parameters of the copulas in a canonical vine.
-  
+
   % WARNING: The way the first dimension of v is indexed here differs from the
   % Algorithm 3 in SAMBA/24/06 because of MATLAB 1-based indexing.
-  
-  fitcopula = params.learning_params.fitcopula;  
+
+  fitcopula = params.learning_params.fitcopula;
   h_function = params.learning_params.h_function;
   h_inverse = params.learning_params.h_inverse;
-  max_trees = params.learning_params.max_trees;
-  
+  max_trees = min(params.learning_params.max_trees, size(uniform_pop, 2) - 1);
+
   n = size(uniform_pop, 2);
 
   theta = cell(n, n);
   h_functions = cell(n, n);
   h_inverses = cell(n, n);
-  
+
   v = cell(n, n);
 
   for i = 1:n
@@ -106,4 +103,10 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
       end
     end
   end
+end
+
+function ordering = ordering_default(population)
+  % Select an ordering of the variables in a Canonical vine.
+
+  ordering = 1:size(population, 2);
 end
