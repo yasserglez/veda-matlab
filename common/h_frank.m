@@ -8,7 +8,7 @@ function results = h_frank(u1, u2, delta)
   
   % Created by Yasser González Fernández (2010).
   
-  u1(u1 == 0) = u1 + eps;
+  u1(u1 == 0) = 0 + eps;
   delta(delta == 0) = 0 + eps;
   
   n = exp(-delta .* u2);
