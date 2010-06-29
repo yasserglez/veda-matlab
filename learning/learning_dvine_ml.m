@@ -30,8 +30,8 @@ function model = learning_dvine_ml(params, population, fitness)
     params.learning_params.max_trees = num_vars - 1;
   end  
   
-  % Select an ordering of the variables.
-  ordering = feval(params.learning_params.ordering, population);
+  % Select an ordering of the variables (currently keeping the default order).
+  ordering = 1:size(population, 2);
   
   % Transform the population into an Uniform(0,1) population applying the
   % univariate marginal CDFs to each observation of each variable in the
@@ -64,9 +64,9 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   % WARNING: The way the first dimension of v is indexed here differs from the
   % Algorithm 4 in SAMBA/24/06 because of MATLAB 1-based indexing.
   
-  fitcopula = params.learning_params.fitcopula;  
-  h_function = params.learning_params.h_function;
-  h_inverse = params.learning_params.h_inverse;
+  gof_cops = params.learning_params.gof_copulas;
+  h_funcs = params.learning_params.h_functions;
+  h_invs = params.learning_params.h_inverses;
   max_trees = min(params.learning_params.max_trees, size(uniform_pop, 2) - 1);
   
   n = size(uniform_pop, 2);
@@ -82,14 +82,21 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   end
   
   for i = 1:n-1
-    if kendall_corr_test(v{1,i}, v{1,i+1})
-      theta{1,i} = feval(fitcopula, v{1,i}, v{1,i+1});
-      h_functions{1,i} = str2func(h_function);
-      h_inverses{1,i} = str2func(h_inverse);
+    if kendall_corr_test(v{1,i}, v{1,i+1}, 0.05)
+      statistic = Inf;
+      for c = 1:size(gof_cops, 2)
+        result = feval(gof_cops{c}, v{1,i}, v{1,i+1});
+        if result.statistic < statistic
+          theta{1,i} = result.parameters;
+          h_functions{1,i} = str2func(h_funcs{c});
+          h_inverses{1,i} = str2func(h_invs{c});
+          statistic = result.statistic;
+        end
+      end
     else
       theta{1,i} = [];
-      h_functions{1,i} = str2func('h_product');
-      h_inverses{1,i} = str2func('hinv_product');
+      h_functions{1,i} = str2func('h_indep');
+      h_inverses{1,i} = str2func('hinv_indep');
     end
   end
   v{2,1} = feval(h_functions{1,1}, v{1,1}, v{1,2}, theta{1,1});
@@ -102,14 +109,21 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
                            
   for j = 2:max_trees
     for i = 1:n-j
-      if kendall_corr_test(v{j,2*i-1}, v{j,2*i})
-        theta{j,i} = feval(fitcopula, v{j,2*i-1}, v{j,2*i});
-        h_functions{j,i} = str2func(h_function);
-        h_inverses{j,i} = str2func(h_inverse);
+      if kendall_corr_test(v{j,2*i-1}, v{j,2*i}, 0.05)
+        statistic = Inf;
+        for c = 1:size(gof_cops, 2)
+          result = feval(gof_cops{c}, v{j,2*i-1}, v{j,2*i});
+          if result.statistic < statistic
+            theta{j,i} = result.parameters;
+            h_functions{j,i} = str2func(h_funcs{c});
+            h_inverses{j,i} = str2func(h_invs{c});
+            statistic = result.statistic;
+          end
+        end
       else
         theta{j,i} = [];
-        h_functions{j,i} = str2func('h_product');
-        h_inverses{j,i} = str2func('hinv_product');
+        h_functions{j,i} = str2func('h_indep');
+        h_inverses{j,i} = str2func('hinv_indep');
       end
     end
     
@@ -128,10 +142,4 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
                                v{j,2*n-2*j-1}, theta{j,n-j});
     end
   end
-end
-
-function ordering = ordering_default(population)
-  % Select an ordering of the variables in a D-vine.
-
-  ordering = 1:size(population, 2);
 end

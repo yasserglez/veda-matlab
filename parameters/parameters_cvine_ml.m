@@ -19,9 +19,6 @@ function params = parameters_cvine_ml()
   params.learning = 'learning_cvine_ml';
   params.learning_params = struct();
 
-  % Method used to select an ordering of the variables.
-  params.learning_params.ordering = 'ordering_default';
-
   % Number of trees of the cannonical vine that will represent dependence and
   % conditional dependence between the variables and assume conditional
   % independence for the rest of the trees.
@@ -30,14 +27,16 @@ function params = parameters_cvine_ml()
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
   params.learning_params.marginal_cdf = 'cdf_gaussian';
+  
+  % Functions to make a goodness-of-fit test. One function for each copula to be
+  % considered to model the bivariate relationships in the C-vine. This should
+  % match the order of the h-functions and its inverses.
+  params.learning_params.gof_copulas = {'gof_gaussian', 'gof_frank'};
 
-  % A function that estimates the parameters of a bivariate copula from a column
-  % vector of observations for each variable.
-  params.learning_params.fitcopula = 'fitcopula_gaussian_kendall';
-
-  % h-functions of the copula used in the decomposition.
-  params.learning_params.h_function = 'h_gaussian';
-  params.learning_params.h_inverse = 'hinv_gaussian';
+  % h-functions and inverse of the copula used in the C-vine. This should match
+  % the order of the goodness-of-fit test functions.
+  params.learning_params.h_functions = {'h_gaussian', 'h_frank'};
+  params.learning_params.h_inverses = {'hinv_gaussian', 'hinv_frank'};
 
   params.sampling = 'sampling_cvine';
   params.sampling_params = struct();

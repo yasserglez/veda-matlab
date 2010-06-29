@@ -10,6 +10,7 @@ function init()
     % Initialize the RMatlab interface to GNU R.
     initializeR({'Rmatlab', '--quiet', '--no-save', '--no-restore'});
     callR('library', 'copula');
+    callR('source', 'R/scripts/gofCopulaWrapper.R');
     
     % Set the flag to avoid executing this code multiple times.
     EDA_INITIALIZED = true;

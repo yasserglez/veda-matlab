@@ -1,4 +1,4 @@
-function parameters = fitcopula_product(x, y)
+function parameters = fit_indep(x, y)
   % Estimate the parameters of a bivariate Independence copula.
   %
   % This function is used to estimate the parameters of a bivariate copula in a

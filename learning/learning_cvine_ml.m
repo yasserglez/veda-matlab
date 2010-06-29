@@ -32,8 +32,8 @@ function model = learning_cvine_ml(params, population, fitness)
     params.learning_params.max_trees = num_vars - 1;
   end
 
-  % Select an ordering of the variables.
-  ordering = feval(params.learning_params.ordering, population);
+  % Select an ordering of the variables (currently keeping the default order).
+  ordering = 1:size(population, 2);
 
   % Transform the population into an Uniform(0,1) population applying the
   % univariate marginal CDFs to each observation of each variable in the
@@ -66,9 +66,9 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   % WARNING: The way the first dimension of v is indexed here differs from the
   % Algorithm 3 in SAMBA/24/06 because of MATLAB 1-based indexing.
 
-  fitcopula = params.learning_params.fitcopula;
-  h_function = params.learning_params.h_function;
-  h_inverse = params.learning_params.h_inverse;
+  gof_cops = params.learning_params.gof_copulas;
+  h_funcs = params.learning_params.h_functions;
+  h_invs = params.learning_params.h_inverses;
   max_trees = min(params.learning_params.max_trees, size(uniform_pop, 2) - 1);
 
   n = size(uniform_pop, 2);
@@ -85,14 +85,21 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
 
   for j = 1:max_trees
     for i = 1:n-j
-      if kendall_corr_test(v{j,1}, v{j,i+1})
-        theta{j,i} = feval(fitcopula, v{j,1}, v{j,i+1});
-        h_functions{j,i} = str2func(h_function);
-        h_inverses{j,i} = str2func(h_inverse);
+      if kendall_corr_test(v{j,1}, v{j,i+1}, 0.05)
+        statistic = Inf;
+        for c = 1:size(gof_cops, 2)
+          result = feval(gof_cops{c}, v{j,1}, v{j,i+1});
+          if result.statistic < statistic
+            theta{j,i} = result.parameters;
+            h_functions{j,i} = str2func(h_funcs{c});
+            h_inverses{j,i} = str2func(h_invs{c});
+            statistic = result.statistic;
+          end
+        end
       else
         theta{j,i} = [];
-        h_functions{j,i} = str2func('h_product');
-        h_inverses{j,i} = str2func('hinv_product');
+        h_functions{j,i} = str2func('h_indep');
+        h_inverses{j,i} = str2func('hinv_indep');
       end
     end
 
@@ -103,10 +110,4 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
       end
     end
   end
-end
-
-function ordering = ordering_default(population)
-  % Select an ordering of the variables in a Canonical vine.
-
-  ordering = 1:size(population, 2);
 end

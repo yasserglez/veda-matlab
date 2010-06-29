@@ -1,4 +1,4 @@
-function delta = fitcopula_clayton_kendall(x, y)
+function delta = fit_clayton_kendall(x, y)
   % Estimate the parameters of a bivariate Clayton copula.
   %
   % This function is used to estimate the parameters of a bivariate copula in a

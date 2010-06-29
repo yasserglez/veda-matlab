@@ -18,10 +18,7 @@ function params = parameters_dvine_ml()
   
   params.learning = 'learning_dvine_ml';
   params.learning_params = struct();
-  
-  % Method used to select an ordering of the variables.
-  params.learning_params.ordering = 'ordering_default';
-  
+
   % Number of trees of the D-vine that will represent dependence and
   % conditional dependence between the variables and assume conditional
   % independence for the rest of the trees.
@@ -31,22 +28,24 @@ function params = parameters_dvine_ml()
   % in a column vector of observations.
   params.learning_params.marginal_cdf = 'cdf_gaussian';
   
-  % A function that estimates the parameters of a bivariate copula from a column
-  % vector of observations for each variable.
-  params.learning_params.fitcopula = 'fitcopula_gaussian_kendall';
+  % Functions to make a goodness-of-fit test. One function for each copula to be
+  % considered to model the bivariate relationships in the D-vine. This should
+  % match the order of the h-functions and its inverses.
+  params.learning_params.gof_copulas = {'gof_gaussian', 'gof_frank'};
+
+  % h-functions and inverse of the copula used in the D-vine. This should match
+  % the order of the goodness-of-fit test functions.
+  params.learning_params.h_functions = {'h_gaussian', 'h_frank'};
+  params.learning_params.h_inverses = {'hinv_gaussian', 'hinv_frank'};
   
-  % h-functions of the copula used in the decomposition.
-  params.learning_params.h_function = 'h_gaussian';
-  params.learning_params.h_inverse = 'hinv_gaussian';
-  
-  params.sampling = 'sampling_dvine';
+  params.sampling = 'sampling_cvine';
   params.sampling_params = struct();
   
   % A function that evaluates the inverse of the marginal CDF of a variable of
   % the population in a column vector of values of the CDF.
   params.sampling_params.marginal_cdf_inverse = 'cdfinv_gaussian';
 
-  params.seeding = 'seeding_uniform';  
+  params.seeding = 'seeding_uniform';
   params.seeding_params = struct();
   params.seeding_params.population_size = 100;
   
