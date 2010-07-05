@@ -30,8 +30,8 @@ function model = learning_dvine_ml(params, population, fitness)
     params.learning_params.max_trees = num_vars - 1;
   end  
   
-  % Select an ordering of the variables (currently keeping the default order).
-  ordering = 1:size(population, 2);
+  % Select an ordering of the variables.
+  ordering = feval(params.learning_params.ordering, population);
   
   % Transform the population into an Uniform(0,1) population applying the
   % univariate marginal CDFs to each observation of each variable in the
@@ -140,6 +140,45 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
       end
       v{j+1,2*n-2*j-2} = feval(h_functions{j,n-j}, v{j,2*n-2*j}, ...
                                v{j,2*n-2*j-1}, theta{j,n-j});
+    end
+  end
+end
+
+function ordering = ordering_default(population)
+  % Default ordering of the variables of a C-vine.
+
+  ordering = 1:size(population, 2);
+end
+
+function ordering = ordering_stronger(population)
+  % An ordering that includes the pair with the stronger dependence.
+  
+  nk = nchoosek(size(population,2),2);
+  is = zeros(1,nk);
+  js = zeros(1,nk);
+  taus = zeros(1,nk);
+  
+  % Calculate the absolute value of the correlations between all variables.
+  k = 0;
+  for j = 1:size(population,2)
+    for i = 1:j-1
+      k = k + 1;
+      is(k) = i;
+      js(k) = j;
+      taus(k) = abs(corr(population(:,i), population(:,j), 'type', 'Kendall'));
+    end
+  end
+  [ignore, taus_ordering] = sort(taus, 'descend');  
+  
+  % Build the ordering vector.
+  ordering = zeros(1,size(population,2));
+  ordering(1) = is(taus_ordering(1));
+  ordering(2) = js(taus_ordering(1));
+  k = 2;
+  for i = 1:size(population,2)
+    if i ~= ordering(1) && i ~= ordering(2)
+      k = k + 1;
+      ordering(k) = i;
     end
   end
 end

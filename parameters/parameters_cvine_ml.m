@@ -23,6 +23,9 @@ function params = parameters_cvine_ml()
   % conditional dependence between the variables and assume conditional
   % independence for the rest of the trees.
   params.learning_params.max_trees = 4;
+  
+  % A function that selects an ordering of the variables in the C-vine.
+  params.learning_params.ordering = 'ordering_stronger';
 
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
