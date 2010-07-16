@@ -68,6 +68,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   h_funcs = params.learning_params.h_functions;
   h_invs = params.learning_params.h_inverses;
   max_trees = min(params.learning_params.max_trees, size(uniform_pop, 2) - 1);
+  indep_test = params.learning_params.indep_test;
   
   n = size(uniform_pop, 2);
 
@@ -82,7 +83,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
   end
   
   for i = 1:n-1
-    if kendall_corr_test(v{1,i}, v{1,i+1}, 0.05)
+    if indep_test && kendall_corr_test(v{1,i}, v{1,i+1}, 0.05)
       statistic = Inf;
       for c = 1:size(gof_cops, 2)
         result = feval(gof_cops{c}, v{1,i}, v{1,i+1});
@@ -109,7 +110,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
                            
   for j = 2:max_trees
     for i = 1:n-j
-      if kendall_corr_test(v{j,2*i-1}, v{j,2*i}, 0.05)
+      if indep_test && kendall_corr_test(v{j,2*i-1}, v{j,2*i}, 0.05)
         statistic = Inf;
         for c = 1:size(gof_cops, 2)
           result = feval(gof_cops{c}, v{j,2*i-1}, v{j,2*i});

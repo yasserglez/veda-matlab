@@ -31,6 +31,11 @@ function params = parameters_dvine_ml()
   % in a column vector of observations.
   params.learning_params.marginal_cdf = 'cdf_gaussian';
   
+  % Boolean value that indicates if an independence test (based on the Kendall's
+  % tau) should be applied to verify if the Independence copula is appropiate 
+  % before fitting the copulas specified in the gof_copulas learning parameter.
+  params.learning_params.indep_test = true;
+  
   % Functions to make a goodness-of-fit test. One function for each copula to be
   % considered to model the bivariate relationships in the D-vine. This should
   % match the order of the h-functions and its inverses.
