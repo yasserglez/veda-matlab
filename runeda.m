@@ -26,11 +26,11 @@ function stats = runeda(parameters)
     tic();
 
     % Initialize statistics for this run.
-    run_generations(run) = 1;
+    run_generations(run) = 0;
     run_evaluations(run) = 0;
     
     while true 
-      if run_generations(run) == 1
+      if run_generations(run) == 0
         % Execute the seeding method. Seeding methods are used to initialize the
         % first population used in the execution of the algorithm.
         sampled_population = feval(params.seeding, params);
@@ -39,20 +39,12 @@ function stats = runeda(parameters)
         % new population from the probabilistic model learned by the EDA.
         sampled_population = feval(params.sampling, params, model, ...
                                    selected_population, selected_fitness);
-                                 
       end
 
       % Evaluate the population in the objective function.
       sampled_fitness = feval(params.objective, params, sampled_population);
-
-      if run_generations(run) > 1
-        % Execute the replacing method. Replacing methods are used to combine
-        % the individuals sampled in the current generation with the individuals
-        % of the previous generation. It can be used to implement elitism.
-        [sampled_population, sampled_fitness] = ...
-          feval(params.replacing, params, sampled_population, ...
-                sampled_fitness, previous_population, previous_fitness);
-              
+      
+      if run_generations(run) > 0
         % Execute the verbose methods. Verbose methods are used to print
         % information about the evolution of the population.
         if ~params.quiet
@@ -62,6 +54,15 @@ function stats = runeda(parameters)
                   sampled_population, sampled_fitness);
           end
         end
+      end
+
+      if run_generations(run) > 1
+        % Execute the replacing method. Replacing methods are used to combine
+        % the individuals sampled in the current generation with the individuals
+        % of the previous generation. It can be used to implement elitism.
+        [sampled_population, sampled_fitness] = ...
+          feval(params.replacing, params, sampled_population, ...
+                sampled_fitness, previous_population, previous_fitness);
       end
       
       population = sampled_population;
@@ -73,11 +74,9 @@ function stats = runeda(parameters)
         run_fitness(run) = best_current;
       end
       run_evaluations(run) = run_evaluations(run) + ...
-                             params.seeding_params.population_size;
+                             params.seeding_params.population_size;      
       
-      % Evaluate the termination conditions. The termination condition is
-      % evaluated at this point to avoid applying the selection and learning
-      % methods in the last generation.
+      % Evaluate the termination conditions.
       terminate = false;
       for i = 1:numel(params.termination)
         terminate = feval(params.termination{i}, params, ...
@@ -91,7 +90,7 @@ function stats = runeda(parameters)
       if terminate
         % Break the loop running the generations.
         break;
-      end
+      end      
 
       % Execute the selection method. Selection methods define the group of
       % individuals that will be modeled using the probabilistic model.
