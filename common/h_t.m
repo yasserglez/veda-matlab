@@ -11,10 +11,11 @@ function results = h_t(u1, u2, theta)
   rho = theta(1);
   df = theta(2);
 
-  u1(u1 == 0) = 0 + eps;
-  u1(u1 == 1) = 1 - eps;
-  u2(u2 == 0) = 0 + eps;
-  u2(u2 == 1) = 1 - eps;
+  u1(u1 <= 0) = 0 + eps;
+  u1(u1 >= 1) = 1 - eps;
+  u2(u2 <= 0) = 0 + eps;
+  u2(u2 >= 1) = 1 - eps;
+  
   rho(rho == -1) = -1 + eps;
   rho(rho == 1) = 1 - eps;
 

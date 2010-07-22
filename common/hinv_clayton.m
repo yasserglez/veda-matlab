@@ -8,10 +8,13 @@ function results = hinv_clayton(u1, u2, delta)
   
   % Created by Yasser González Fernández (2010).
 
-  u1(u1 == 0) = 0 + eps;
-  u2(u2 == 0) = 0 + eps;
+  u1(u1 <= 0) = 0 + eps;
+  u1(u1 >= 1) = 1 - eps;
+  u2(u2 <= 0) = 0 + eps;
+  u2(u2 >= 1) = 1 - eps;
+
   delta(delta == 0) = 0 + eps;
-  
+
   results = (((u1 .* (u2 .^ (delta+1))) .^ (-delta/(delta+1))) + ...
              1 - u2 .^ (-delta)) .^ (-1/delta);
 end

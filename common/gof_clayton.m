@@ -1,5 +1,5 @@
-function result = gof_frank(x, y)
-  % Goodness-of-fit test for the bivariate Frank copula.
+function result = gof_clayton(x, y)
+  % Goodness-of-fit test for the bivariate Clayton copula.
   
   % Created by Yasser González Fernández (2010).
   
@@ -8,5 +8,5 @@ function result = gof_frank(x, y)
   y(y <= 0) = 0 + eps;
   y(y >= 1) = 1 - eps;
 
-  result = callR('gofCopulaWrapper', 'frank', [x, y]);
+  result = callR('gofCopulaWrapper', 'clayton', [x, y]);
 end

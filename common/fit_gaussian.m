@@ -1,5 +1,5 @@
-function delta = fit_frank(x, y)
-  % Estimate the parameters of a bivariate Frank copula.
+function rho = fit_gaussian(x, y)
+  % Estimate the parameters of a bivariate Gaussian copula.
   %
   % This function is used to estimate the parameters of a bivariate copula in a
   % pair-copula decomposition of a multivariate density function. X and Y are
@@ -13,5 +13,5 @@ function delta = fit_frank(x, y)
   y(y <= 0) = 0 + eps;
   y(y >= 1) = 1 - eps;
   
-  delta = copulafit('Frank', [x, y]);
+  rho = copulafit('Gaussian', [x, y]);
 end
