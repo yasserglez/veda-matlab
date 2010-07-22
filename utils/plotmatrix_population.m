@@ -1,5 +1,5 @@
-function plotmatrix_population
-  % Generate plotmatrix plots for populations.
+function plotmatrix_population()
+  % Generate plotmatrix plots from populations.
   %
   % Reads the files saved using the verbose_populations verbose method found in
   % the current working directory and generates plotmatrix plots.
@@ -9,11 +9,12 @@ function plotmatrix_population
     file = files(i);
     if ~file.isdir
       [path, name] = fileparts(file.name);
-      population = load(file.name, '-ascii');
+      pop = load(file.name, '-ascii');
       figure('Visible', 'off');
-      plotmatrix(population);
+      plotmatrix(pop);
       title(strrep(file.name, '_', '\_'));
-      print('-djpeg', strcat(name, '.jpg'));
+      plotfile = strcat(name, '.jpg');
+      print('-djpeg', plotfile);
     end
   end
 end
