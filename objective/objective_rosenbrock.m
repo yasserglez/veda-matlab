@@ -8,12 +8,9 @@ function fitness = objective_rosenbrock(params, population)
   % Global minima: x* = (1, ..., 1), f(x*) = 0.
   
   fitness = zeros(size(population, 1), 1);
-  for individual = 1:size(population, 1)
-    x = population(individual,:);
-    z = 0;
-    for j = 1:size(population, 2) - 1
-      z = z + 100 * (x(j)^2 - x(j + 1))^2 + (x(j) - 1)^2;
-    end
-    fitness(individual) = z;
+  n = size(population, 2);
+  x = population;
+  for i = 1:n-1
+    fitness = fitness + (100 .* (x(:,i+1) - x(:,i).^2).^2 + (x(:,i) - 1).^2);
   end
 end
