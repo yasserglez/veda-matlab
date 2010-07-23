@@ -1,4 +1,13 @@
 gofCopulaWrapper <- function(copulaName, data) {
+    result <- tryCatch(gofCopulaInternal(copulaName, data), error = function(error) NULL)
+    if (is.null(result)) {
+        # Return a value that will make the algorithm ignore this copula.
+        result <- list(statistic=.Machine$double.xmax, pvalue=0, parameters=0)
+    }
+    result
+}
+
+gofCopulaInternal <- function(copulaName, data) {
     copula <- {
         if (copulaName == "frank") {
             frankCopula(1)
@@ -17,15 +26,8 @@ gofCopulaWrapper <- function(copulaName, data) {
             tCopula(rho, df=df, df.fixed=TRUE)
         }
     }
-    result <- tryCatch(gofCopula(copula, data, method="itau", simulation="mult"),
-                       error = function(error) NULL)
-    if (is.null(result)) {
-        # Return a value that will make the algorithm ignore this copula.
-        result <- list(statistic=.Machine$double.xmax, 
-                       pvalue=0,
-                       parameters=0)
-    }
-    else if (copulaName == "t") {
+    result <- gofCopula(copula, data, method="itau", simulation="mult")
+    if (copulaName == "t") {
         result$parameters <- c(result$parameters, copula@df)
     }
     result
