@@ -1,10 +1,10 @@
 function population = ...
-    sampling_cvine(params, model, selected_population, selected_fitness)
-  % Sample a canonical vine learned from a population.
+    sampling_cveda(params, model, selected_population, selected_fitness)
+  % Sampling function of the C-Vine EDA.
   %
   % PARAMS is a struct with the parameters of the EDA. MODEL is a struct
   % representing the canonical vine, see the documentation of the
-  % learning_cvine_ml function for information about the fields.
+  % learning_cveda_ml function for information about the fields.
   % SELECTED_POPULATION is the population from where the canonical vine was
   % learned and SELECTED_FITNESS its evaluation.
   %

@@ -1,7 +1,7 @@
-function params = parameters_cvine_ml()
+function params = parameters_cveda()
   params = struct();
 
-  params.note = 'Canonical vine estimated by maximum likelihood.';
+  params.note = 'C-Vine EDA with Gaussian marginals.';
   params.runs = 1;
   params.quiet = false;
 
@@ -14,9 +14,7 @@ function params = parameters_cvine_ml()
   params.objective_params.optimum = 0;
   params.objective_params.optimum_individual = repmat(0, 1, n);
 
-  % LEARNING A CANONICAL VINE BY MAXIMUM LIKELIHOOD.
-
-  params.learning = 'learning_cvine_ml';
+  params.learning = 'learning_cveda_ml';
   params.learning_params = struct();
 
   % Number of trees of the cannonical vine that will represent dependence and
@@ -41,12 +39,12 @@ function params = parameters_cvine_ml()
   % match the order of the h-functions and its inverses.
   params.learning_params.gof_copulas = {'gof_gaussian', 'gof_frank'};
 
-  % h-functions and inverse of the copula used in the C-vine. This should match
+  % h-functions and inverse of the copula used in the D-vine. This should match
   % the order of the goodness-of-fit test functions.
   params.learning_params.h_functions = {'h_gaussian', 'h_frank'};
   params.learning_params.h_inverses = {'hinv_gaussian', 'hinv_frank'};
 
-  params.sampling = 'sampling_cvine';
+  params.sampling = 'sampling_cveda';
   params.sampling_params = struct();
 
   % A function that evaluates the inverse of the marginal CDF of a variable of
@@ -62,7 +60,7 @@ function params = parameters_cvine_ml()
 
   params.termination = {'termination_generations', 'termination_optimum'};
   params.termination_params = struct();
-  params.termination_params.max_generations = 25;
+  params.termination_params.max_generations = 100;
   params.termination_params.error_tolerance = 1e-7;
 
   params.selection = 'selection_truncation';

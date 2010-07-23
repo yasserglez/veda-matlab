@@ -1,7 +1,7 @@
-function params = parameters_dvine_ml()  
+function params = parameters_dveda()  
   params = struct();
 
-  params.note = 'D-vine estimated by maximum likelihood.';
+  params.note = 'D-Vine EDA with Gaussian marginals.';
   params.runs = 1;
   params.quiet = false;
 
@@ -14,9 +14,7 @@ function params = parameters_dvine_ml()
   params.objective_params.optimum = 0;
   params.objective_params.optimum_individual = repmat(0, 1, n);
   
-  % LEARNING A D-VINE BY MAXIMUM LIKELIHOOD.
-  
-  params.learning = 'learning_dvine_ml';
+  params.learning = 'learning_dveda_ml';
   params.learning_params = struct();
 
   % Number of trees of the D-vine that will represent dependence and
@@ -46,7 +44,7 @@ function params = parameters_dvine_ml()
   params.learning_params.h_functions = {'h_gaussian', 'h_frank'};
   params.learning_params.h_inverses = {'hinv_gaussian', 'hinv_frank'};
   
-  params.sampling = 'sampling_cvine';
+  params.sampling = 'sampling_dveda';
   params.sampling_params = struct();
   
   % A function that evaluates the inverse of the marginal CDF of a variable of
@@ -56,13 +54,13 @@ function params = parameters_dvine_ml()
   params.seeding = 'seeding_uniform';
   params.seeding_params = struct();
   params.seeding_params.population_size = 100;
-  
+
   params.replacing = 'replacing_none';
   params.replacing_params = struct();
-  
+
   params.termination = {'termination_generations', 'termination_optimum'};
   params.termination_params = struct();
-  params.termination_params.max_generations = 25;
+  params.termination_params.max_generations = 100;
   params.termination_params.error_tolerance = 1e-7;
   
   params.selection = 'selection_truncation';

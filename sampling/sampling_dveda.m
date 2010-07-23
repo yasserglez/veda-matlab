@@ -1,9 +1,9 @@
 function population = ...
-    sampling_dvine(params, model, selected_population, selected_fitness)
-  % Sample a D-vine learned from a population.
+    sampling_dveda(params, model, selected_population, selected_fitness)
+  % Sampling function of the D-Vine EDA.
   %
   % PARAMS is a struct with the parameters of the EDA. MODEL is a struct
-  % representing the D-vine, see the documentation of the learning_dvine_ml
+  % representing the D-vine, see the documentation of the learning_dveda_ml
   % function for information about the fields. SELECTED_POPULATION is the
   % population from where the canonical vine was learned and SELECTED_FITNESS
   % its evaluation.
