@@ -86,7 +86,7 @@ function [theta, h_functions, h_inverses] = starting_theta(params, uniform_pop)
 
   for j = 1:max_trees
     for i = 1:n-j
-      if indep_test && kendall_corr_test(v{j,1}, v{j,i+1}, 0.05)
+      if ~indep_test || kendall_corr_test(v{j,1}, v{j,i+1}, 0.05)
         statistic = Inf;
         for c = 1:size(gof_cops, 2)
           result = feval(gof_cops{c}, v{j,1}, v{j,i+1});
