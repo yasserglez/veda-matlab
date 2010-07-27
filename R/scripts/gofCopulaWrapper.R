@@ -37,5 +37,12 @@ gofCopulaInternal <- function(copulaName, data) {
         # As the degrees-of-freedom is fixed it is not included in the parameters.
         result$parameters <- c(result$parameters, copula@df)
     }
+    else if (copulaName == "clayton" && result$parameters <= 0) {
+        # The lower bound of the parameter of the bivariate Clayton copula is set 
+        # to -1 in the copula R package wich differs with Appendix B.3 of 
+        # Aas, K., Czado, C., Frigessi, A. & Bakken, H. Pair-copula constructions 
+        # of multiple dependence Norwegian Computing Center, NR, 2006 (SAMBA/24/06).
+        result = NULL
+    }
     result
 }
