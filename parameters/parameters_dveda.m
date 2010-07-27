@@ -37,12 +37,12 @@ function params = parameters_dveda()
   % Functions to make a goodness-of-fit test. One function for each copula to be
   % considered to model the bivariate relationships in the D-vine. This should
   % match the order of the h-functions and its inverses.
-  params.learning_params.gof_copulas = {'gof_gaussian', 'gof_frank'};
+  params.learning_params.gof_copulas = {'gof_gaussian', 'gof_t', 'gof_clayton', 'gof_gumbel'};
 
   % h-functions and inverse of the copula used in the D-vine. This should match
   % the order of the goodness-of-fit test functions.
-  params.learning_params.h_functions = {'h_gaussian', 'h_frank'};
-  params.learning_params.h_inverses = {'hinv_gaussian', 'hinv_frank'};
+  params.learning_params.h_functions = {'h_gaussian', 'h_t', 'h_clayton', 'h_gumbel'};
+  params.learning_params.h_inverses = {'hinv_gaussian', 'hinv_t', 'hinv_clayton', 'hinv_gumbel'};
   
   params.sampling = 'sampling_dveda';
   params.sampling_params = struct();
