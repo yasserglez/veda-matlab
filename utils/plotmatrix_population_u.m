@@ -20,7 +20,7 @@ function plotmatrix_population_u(marginal_cdf)
       figure('Visible', 'off');
       plotmatrix(upop);
       title(strrep(file.name, '_', '\_'));
-      plotfile = strcat(regexprep(name, '(\d+)$', 'u_$1'), '.jpg');
+      plotfile = strcat(name, '_plotmatrix_uniform', '.jpg');
       print('-djpeg', plotfile);
     end
   end
