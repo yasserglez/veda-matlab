@@ -16,5 +16,5 @@ function results = h_gumbel(u1, u2, delta)
   C = exp(-((((-log(u1)) .^ delta) + ((-log(u2)) .^ delta)) .^ (1/delta)));
 
   results = C .* (1./u2) .* ((-log(u2)) .^ (delta-1)) ...
-    .* ((((-log(u1)) .^ delta) + ((-log(u2)) .^ delta)) .^ (1/(delta-1)));
+    .* ((((-log(u1)) .^ delta) + ((-log(u2)) .^ delta)) .^ ((1/delta)-1));
 end
