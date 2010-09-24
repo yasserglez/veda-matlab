@@ -8,7 +8,7 @@ function fitness = objective_ackley(params, population)
   % The global minima: x* = (0, ..., 0), f(x*) = 0.
   
   n = size(population, 2);
-  power_term = exp(-0.2 * sqrt(1/n * sum(population .^ 2, 2)));
-  cos_term = exp(1/n * sum(cos(2*pi * population), 2));
-  fitness = -20 * power_term - cos_term + 20 + exp(1);
+  square_term = exp(-0.2 * sqrt(sum(population .^ 2, 2) / n));
+  cos_term = exp(sum(cos(2*pi * population), 2) / n);
+  fitness = -20 * square_term - cos_term + 20 + exp(1);
 end
