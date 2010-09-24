@@ -3,5 +3,5 @@ function model = learning_umda(params, population, fitness)
 
   % Created by Yasser González Fernández (2010).  
 
-  model = {};
+  model = struct();
 end

@@ -63,7 +63,6 @@ function population = ...
   % Transform the simulated Uniform(0,1) population into a population of the
   % variables of the objective function applying the inverse of the univariate
   % marginal CDFs to each observation of each variable in the population.
-  
   population = zeros(pop_size, n);
   for k = 1:n
     population(:,ordering(k)) = ...
