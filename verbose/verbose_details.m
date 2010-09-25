@@ -8,12 +8,16 @@ function verbose_details(params, generation, population, fitness, ...
   fprintf('\nDetailed statistics for generation %d:\n', generation);
   [best_fitness, best_index] = min(fitness);
   n = params.objective_params.number_variables;
-  message = sprintf('  Best individual:%s\n', repmat(' %g', 1, n));
+  message = sprintf('  Best individual:%s\n', repmat(' %E', 1, n));
   fprintf(message, population(best_index,:));
-  fprintf('  Best individual fitness: %g\n', best_fitness);
-  fprintf('  Population fitness: %g (%g)\n', mean(fitness), std(fitness));
-  fprintf('  Selected population fitness: %g (%g)\n', ...
+  fprintf('  Best individual fitness: %E\n', best_fitness);
+  if isfield(params.objective_params, 'optimum')
+    fprintf('  Best individual error: %E\n', ...
+      abs(params.objective_params.optimum - best_fitness))
+  end
+  fprintf('  Population fitness: %E (%E)\n', mean(fitness), std(fitness));
+  fprintf('  Selected population fitness: %E (%E)\n', ...
           mean(selected_fitness), std(selected_fitness));
-  fprintf('  Sampled population fitness: %g (%g)\n', ...
+  fprintf('  Sampled population fitness: %E (%E)\n', ...
           mean(sampled_fitness), std(sampled_fitness));
 end
