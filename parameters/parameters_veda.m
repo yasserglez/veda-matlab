@@ -1,4 +1,4 @@
-function params = parameters_cveda()
+function params = parameters_veda()
   params = struct();
 
   params.note = 'C-Vine EDA with Gaussian marginals.';
@@ -14,37 +14,35 @@ function params = parameters_cveda()
   params.objective_params.optimum = 0;
   params.objective_params.optimum_individual = repmat(0, 1, n);
 
-  params.learning = 'learning_cveda_ml';
+  params.learning = 'learning_veda_ml';
   params.learning_params = struct();
-
-  % Number of trees of the cannonical vine that will represent dependence and
-  % conditional dependence between the variables and assume conditional
-  % independence for the rest of the trees.
-  params.learning_params.max_trees = 4;
   
-  % A function that selects an ordering of the variables in the C-vine.
+  % Type of vine: CVine or DVine.
+  params.learning_params.vine_type = 'CVine';
+
+  % Number of trees of the vine that will represent dependence and
+  % conditional dependence. Assume conditional independence for the rest.
+  params.learning_params.max_trees = 2;
+  
+  % A function that selects an ordering of the variables in the vine.
   params.learning_params.ordering = 'ordering_stronger';
 
   % A function that evaluates the marginal CDF of a variable of the population
   % in a column vector of observations.
   params.learning_params.marginal_cdf = 'cdf_gaussian';
   
-  % Boolean value that indicates if an independence test (based on the Kendall's
-  % tau) should be applied to verify if the Independence copula is appropiate 
-  % before fitting the copulas specified in the gof_copulas learning parameter.
-  params.learning_params.indep_test = true;
+  % Significance level of the hypothesis test for correlation to check if there
+  % is enough evidence of dependence before fitting a copula. If the
+  % independence is not rejected at this significance level, the Independence 
+  % copula will be used.
+  params.learning_params.cor_test_level = 0.1;
   
-  % Functions to make a goodness-of-fit test. One function for each copula to be
-  % considered to model the bivariate relationships in the D-vine. This should
-  % match the order of the h-functions and its inverses.
-  params.learning_params.gof_copulas = {'gof_gaussian', 'gof_t', 'gof_clayton', 'gof_gumbel'};
+  % Candidate copulas for the pair copula construction. The algorithm learning
+  % the vine will select the "best" copula from this list for each copula in
+  % the decomposition.
+  params.learning_params.copulas = {'Gaussian'};
 
-  % h-functions and inverse of the copula used in the D-vine. This should match
-  % the order of the goodness-of-fit test functions.
-  params.learning_params.h_functions = {'h_gaussian', 'h_t', 'h_clayton', 'h_gumbel'};
-  params.learning_params.h_inverses = {'hinv_gaussian', 'hinv_t', 'hinv_clayton', 'hinv_gumbel'};
-
-  params.sampling = 'sampling_cveda';
+  params.sampling = 'sampling_veda';
   params.sampling_params = struct();
 
   % A function that evaluates the inverse of the marginal CDF of a variable of
