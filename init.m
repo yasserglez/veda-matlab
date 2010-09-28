@@ -4,6 +4,9 @@ function init()
   global INIT;
   
   if isempty(INIT)
+    % Initialize the random number generator using a time-dependent seed.
+    RandStream.setDefaultStream(RandStream('mt19937ar', 'seed', sum(100 * clock)));
+  
     % Add subdirectories to the MATLAB path.
     addpath(genpath(pwd()));
     
@@ -11,7 +14,7 @@ function init()
     initializeR({'Rmatlab', '--quiet', '--no-save', '--no-restore'});
     callR('source', 'R/scripts/VEDA.R');
     
-    % Set the flag to avoid executing this code multiple times.
+    % Set a flag to avoid executing this code multiple times.
     INIT = true;
   end
 end

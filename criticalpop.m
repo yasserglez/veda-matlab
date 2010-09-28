@@ -27,7 +27,7 @@ function criticalpop(parameters, left, right, r, p)
     while (num_success + num_fails) < r
       fprintf('Run #%d with population size %d...', ...
               num_success + num_fails + 1, middle);
-      run_stats = runeda(@() params);
+      run_stats = run(@() params);
       if run_stats.success == 0
         fprintf('FAILED!\n');
         num_fails = num_fails + 1;

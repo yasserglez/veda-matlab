@@ -1,4 +1,4 @@
-function stats = runeda(parameters)
+function stats = run(parameters)
   % Run an Estimation of Distribution Algorithm.
   %
   % PARAMETERS is a struct that defines the parameters of the Estimation of

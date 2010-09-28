@@ -3,24 +3,29 @@ library(vines)
 copulaObject <- function (copulaName) {
     copulaName <- tolower(copulaName)
     if (copulaName %in% c("normal", "gaussian")) {
-        copula <- normalCopula(0)
-    }
-    return(copula)
+        normalCopula(0)
+    } else if (copulaName == "t") {
+      tCopula(0)
+    } else if (copulaName == "clayton") {
+      claytonCopula(1)
+    } else if (copulaName == "gumbel") {
+      gumbelCopula(1)
+    } 
 }
 
 learnVine <- function (type, data, trees, corTestSigLevel, ...) {
     copulas <- lapply(..., copulaObject)
-    fit <- fitVine(type, data, trees = trees, corTestMethod = "kendall", 
-        corTestSigLevel = corTestSigLevel, gofCopulaIters = 500, 
-        gofCopulaMethod = "itau", gofCopulaSimul = "mult", 
-        copulas = copulas)
+    fit <- fitVine(type, data, trees = trees, 
+        corTestSigLevel = corTestSigLevel, 
+        gofCopulaMethod = "itau", gofCopulaSimul = "mult",
+        optimMethod = NULL, copulas = copulas)
     VINE <<- fit@vine
-    # TODO: Return an string with information about the fitted vine.
+
     return("")
 }
 
 sampleVine <- function (n) {
     u <- rvine(VINE, n)
+
     return(u)
 }
-
