@@ -1,6 +1,6 @@
 function h = kendall_corr_test(x, y, alpha)
-  % Test whether two samples come from uncorrelated populations.
-  
+  % Independence test based on the Kendall's tau rank correlation coefficient.
+
   if exist('kendall', 'file') == 2
     % Octave Statistics Package.
     p = corr_test(x, y, '!=', 'kendall');

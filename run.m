@@ -4,9 +4,9 @@ function stats = run(parameters)
   % PARAMETERS is a struct that defines the parameters of the Estimation of
   % Distribution Algorithm. See the parameters directory for an example.
 
-  % Created by Yasser González Fernández (2010).
-  
-  init();
+  % Add subdirectories to the MATLAB path.
+  addpath(genpath(pwd()));
+
   params = feval(parameters);
 
   if ~params.quiet

@@ -8,8 +8,6 @@ function population = seeding_uniform(params)
   % and rows for indiviluals. The number of individuals in the population is
   % given by PARAMS.seeding_params.population_size.
 
-  % Created by Yasser González Fernández (2010).
-
   lower_bounds = repmat(params.objective_params.lower_bounds, ...
                         params.seeding_params.population_size, 1);
   upper_bounds = repmat(params.objective_params.upper_bounds, ...
