@@ -44,32 +44,63 @@ end
 function ordering = ordering_stronger(vine_type, population)
   % An ordering that includes the pair with the stronger dependence.
   
-  nk = nchoosek(size(population,2),2);
-  is = zeros(1,nk);
-  js = zeros(1,nk);
-  taus = zeros(1,nk);
+  n = size(population, 2);
+  taus = abs(corr(population, 'type', 'Kendall'));
+  taus = triu(taus) + diag(repmat(-Inf, 1, n)) + tril(taus);
   
-  % Calculate the absolute value of the correlations between all variables.
-  k = 0;
-  for j = 1:size(population,2)
-    for i = 1:j-1
-      k = k + 1;
-      is(k) = i;
-      js(k) = j;
-      taus(k) = abs(kendall_corr(population(:,i), population(:,j)));
+  [tk, k] = max(taus(:));
+  [i, j] = ind2sub(size(taus), k);
+  all = 1:n;
+  rest = all(all ~= i & all ~= j);
+  ordering = [i, j, rest];
+end
+
+function ordering = ordering_greedy(vine_type, population)
+  % Select an ordering using a greedy algorithm that builds the vine adding the
+  % bivariate relationships with the greater absolute value of Kendall's tau.
+  
+  n = size(population, 2);
+  taus = abs(corr(population, 'type', 'Kendall'));
+  taus = triu(taus) + diag(repmat(-Inf, 1, n)) + tril(taus);
+  
+  [tk, k] = max(taus(:));
+  [i, j] = ind2sub(size(taus), k);
+  taus(i,j) = -Inf; 
+  taus(j,i) = -Inf;
+  
+  if strcmpi(vine_type, 'cvine');
+    [tii, ii] = max(taus(:,i));
+    [tjj, jj] = max(taus(:,j));
+    all = 1:n;
+    if tii >= tjj
+      rest = all(all ~= i & all ~= ii & all ~= j);
+      ordering = [i, ii, j, rest];
+    else
+      rest = all(all ~= j & all ~= jj & all ~= i);
+      ordering = [j, jj, i, rest];
     end
   end
-  [ignore, taus_ordering] = sort(taus, 'descend');  
   
-  % Build the ordering vector.
-  ordering = zeros(1,size(population,2));
-  ordering(1) = is(taus_ordering(1));
-  ordering(2) = js(taus_ordering(1));
-  k = 2;
-  for i = 1:size(population,2)
-    if i ~= ordering(1) && i ~= ordering(2)
-      k = k + 1;
-      ordering(k) = i;
+  if strcmpi(vine_type, 'dvine')
+    ordering = [i, j];
+    while length(ordering) < n
+      i = ordering(1);
+      j = ordering(end);
+      [tii, ii] = max(taus(:,i));
+      [tjj, jj] = max(taus(:,j));
+      if tii >= tjj
+        for k = ordering
+          taus(k,ii) = -Inf;
+          taus(ii,k) = -Inf;
+        end
+        ordering = [ii, ordering];
+      else
+        for k = ordering
+          taus(k,jj) = -Inf;
+          taus(jj,k) = -Inf;
+        end
+        ordering = [ordering, jj];
+      end
     end
   end
 end
