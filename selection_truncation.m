@@ -1,5 +1,5 @@
 function selection = selection_truncation(params, population, fitness)
-  % Apply selection by truncation from the given population.
+  % Truncation selection.
   %
   % PARAMS is a struct with the parameters of the EDA. POPULATION is the
   % population of the current generation and FITNESS the evaluation of the
@@ -11,8 +11,6 @@ function selection = selection_truncation(params, population, fitness)
   % product of the number of individuals in the population and the truncation
   % coefficient given by PARAMS.selection_params.truncation_coefficient.
   
-  % Created by Yasser González Fernández (2010).  
-
   coef = params.selection_params.truncation_coefficient;
   pop_size = size(population, 1);
   [sorted, indexes] = sort(fitness);

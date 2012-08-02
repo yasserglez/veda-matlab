@@ -2,8 +2,6 @@ function verbose_simple(params, generation, population, fitness, ...
                         selected_population, selected_fitness, ...
                         sampled_population, sampled_fitness)
   % Prints one line with statistical information on each generation.
-  
-  % Created by Yasser González Fernández (2010).
 
   best_fitness = min(fitness);
   mean_fitness = mean(fitness);

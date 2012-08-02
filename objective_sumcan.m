@@ -1,8 +1,6 @@
 function fitness = objective_sumcan(params, population)
-  % Summation Cancellation objective function. 
-  %
-  % The global minima: x* = (0, ..., 0), f(x*) = -10^5.
-  
+  % Summation Cancellation. x* = (0, ..., 0). f(x*) = -10^5.
+
   [m, n] = size(population);
   y = zeros(m, n);
   y(:,1) = population(:,1);

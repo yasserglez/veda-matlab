@@ -1,8 +1,6 @@
 function fitness = objective_griewank(params, population)
-  % Griewank objective function. 
-  %
-  % The global minima: x* = (0, ..., 0) with f(x*) = 0.
-  
+  % Griewank. x* = (0, ..., 0). f(x*) = 0.
+
   p = size(population, 1);
   n = size(population, 2);
   sum_square = sum(population .^ 2, 2) / 4000;

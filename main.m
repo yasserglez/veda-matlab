@@ -1,20 +1,15 @@
-function stats = run(parameters)
-  % Run an Estimation of Distribution Algorithm.
+function stats = main(params)
+  % Main loop of an Estimation of Distribution Algorithm.
   %
-  % PARAMETERS is a struct that defines the parameters of the Estimation of
-  % Distribution Algorithm. See the parameters directory for an example.
-
-  % Add subdirectories to the MATLAB path.
-  addpath(genpath(pwd()));
-
-  params = feval(parameters);
+  % PARAMS is a struct that defines the parameters of the Estimation
+  % of Distribution Algorithm. See cveda.m and dveda.m for examples.
 
   if ~params.quiet
     fprintf('%s\n\n', params.note);
-    fprintf('Execution started at %s\n\n', datestr(now(), 31));
+    fprintf('Run started at %s\n\n', datestr(now(), 31));
   end  
   
-  % Vectors to collect statistics of all the runs.
+  % Vectors that collect statistics of the runs.
   run_success = nan(params.runs, 1);
   run_errors = nan(params.runs, 1);
   run_generations = nan(params.runs, 1);
@@ -31,22 +26,19 @@ function stats = run(parameters)
     
     while true 
       if run_generations(run) == 0
-        % Execute the seeding method. Seeding methods are used to initialize the
-        % first population used in the execution of the algorithm.
+        % Seeding method.
         sampled_population = feval(params.seeding, params);
       else
-        % Execute the sampling method. Sampling methods are used to generate the
-        % new population from the probabilistic model learned by the EDA.
+        % Sampling method.
         sampled_population = feval(params.sampling, params, model, ...
                                    selected_population, selected_fitness);
       end
 
       % Evaluate the population in the objective function.
       sampled_fitness = feval(params.objective, params, sampled_population);
-      
+
       if run_generations(run) > 0
-        % Execute the verbose methods. Verbose methods are used to print
-        % information about the evolution of the population.
+        % Report progress information.
         if ~params.quiet
           for i = 1:numel(params.verbose)
             feval(params.verbose{i}, params, run_generations(run), ...
@@ -56,18 +48,9 @@ function stats = run(parameters)
         end
       end
 
-      if run_generations(run) > 1
-        % Execute the replacing method. Replacing methods are used to combine
-        % the individuals sampled in the current generation with the individuals
-        % of the previous generation. It can be used to implement elitism.
-        [sampled_population, sampled_fitness] = ...
-          feval(params.replacing, params, sampled_population, ...
-                sampled_fitness, previous_population, previous_fitness);
-      end
-      
       population = sampled_population;
       fitness = sampled_fitness;
-      
+
       % Update the statistics of this run.
       best_current = min(fitness);
       if isnan(run_fitness(run)) || best_current < run_fitness(run)
@@ -75,7 +58,7 @@ function stats = run(parameters)
       end
       run_evaluations(run) = run_evaluations(run) + ...
                              params.seeding_params.population_size;      
-      
+
       % Evaluate the termination conditions.
       terminate = false;
       for i = 1:numel(params.termination)
@@ -83,35 +66,28 @@ function stats = run(parameters)
                           run_generations(run), run_evaluations(run), ...
                           population, fitness);
         if terminate
-          % Break the loop executing termination conditions.
+          % Break the loop for the termination conditions.
           break;
         end
       end
       if terminate
-        % Break the loop running the generations.
+        % Break the main loop of the EDA.
         break;
-      end      
+      end
 
-      % Execute the selection method. Selection methods define the group of
-      % individuals that will be modeled using the probabilistic model.
+      % Selection method.
       selection = feval(params.selection, params, population, fitness);
       selected_population = population(selection,:);
       selected_fitness = fitness(selection);
       
-      % Execute the learning method. Learning methods returns a probabilistic
-      % model that its used to sample the population in the next generation.
+      % Learning method.
       model = feval(params.learning, params, selected_population, ...
                     selected_fitness);
 
-      % Prepare for the next generation.
-      previous_population = population;
-      previous_fitness = fitness;
       run_generations(run) = run_generations(run) + 1;
     end
-    
-    % Current run is finished.
-    
-    % Update the statistics of this run.
+
+    % Update the statistics of this run that just finished.
     run_time(run) = toc();
     if isfield(params.objective_params, 'optimum')
       tolerance = params.termination_params.error_tolerance;
@@ -122,9 +98,9 @@ function stats = run(parameters)
         run_success(run) = false;
       end
     end
-    
+
     if ~params.quiet
-      msg = '\nRun %d of %d stoped at generation %d Time: %f seconds\n\n';
+      msg = '\nRun %d of %d stoped at generation %d. Time: %f seconds\n\n';
       fprintf(msg, run, params.runs, run_generations(run), run_time(run));
     end
   end
@@ -144,9 +120,9 @@ function stats = run(parameters)
             mean(run_fitness), std(run_fitness));
     fprintf('  Runtime: %f seconds (%f)\n', mean(run_time), std(run_time));
 
-    fprintf('\n\nExecution finished at: %s\n', datestr(now(), 31));
+    fprintf('\n\Run finished at: %s\n', datestr(now(), 31));
   end
-  
+
   % Return the statistics.
   if nargout ~= 0
     stats = struct();

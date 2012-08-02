@@ -15,13 +15,13 @@ function population = ...
 
   pop_size = params.seeding_params.population_size;
   n = params.objective_params.number_variables;
-  cdf_inverse = params.sampling_params.marginal_cdf_inverse;
+  q_margin = params.sampling_params.q_margin;
 
   ordering = model.ordering;
   theta = model.theta;
   h_functions = model.h_functions;
   h_inverses = model.h_inverses;
-  max_trees = model.max_trees;
+  vine_trees = model.vine_trees;
 
   uniform_pop = zeros(pop_size, n);
   W = unifrnd(0, 1, pop_size, n);
@@ -35,14 +35,14 @@ function population = ...
     for i = 2:n
       % Sampling the i-th variable.
       v(i,1) = w(i);
-      for k = min(max_trees, i-1):-1:1
+      for k = min(vine_trees, i-1):-1:1
         v(i,1) = feval(h_inverses{k,i-k}, v(i,1), v(k,k), theta{k,i-k});
       end
       uniform_pop(individual,i) = v(i,1);
 
       % Compute the h-inverse values needed for the (i+1)-th variable.
       if i ~= n
-        for j = 1:min(max_trees, i-1)
+        for j = 1:min(vine_trees, i-1)
           v(i,j+1) = feval(h_functions{j,i-j}, v(i,j), v(j,j), theta{j,i-j});
         end
       end
@@ -53,6 +53,6 @@ function population = ...
   population = zeros(pop_size, n);
   for k = 1:n
     population(:,ordering(k)) = ...
-      feval(cdf_inverse, selected_population(:,ordering(k)), uniform_pop(:,k));
+      feval(q_margin, selected_population(:,ordering(k)), uniform_pop(:,k));
   end
 end

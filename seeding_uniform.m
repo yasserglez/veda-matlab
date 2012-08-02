@@ -1,5 +1,5 @@
 function population = seeding_uniform(params)
-  % Initialize a Uniform random population. 
+  % Initialize a random population. 
   %
   % PARAMS is a struct with the parameters of the EDA. The output variable
   % POPULATION is the random population sampled from the uniform distribution in

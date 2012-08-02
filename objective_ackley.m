@@ -1,7 +1,5 @@
 function fitness = objective_ackley(params, population)
-  % Ackley objective function. 
-  %
-  % The global minima: x* = (0, ..., 0) with f(x*) = 0.
+  % Ackley. x* = (0, ..., 0). f(x*) = 0.
 
   n = size(population, 2);
   square_term = exp(-0.2 * sqrt(sum(population .^ 2, 2) / n));
