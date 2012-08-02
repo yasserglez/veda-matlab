@@ -67,7 +67,7 @@ function [theta, h_functions, h_inverses] = estimate_parameters(params, uniform_
   for j = 1:vine_trees
     for i = 1:n-j
       if kendall_corr_test(v{j,1}, v{j,i+1}, cor_test_level)
-        theta{j,i} = sin(0.5 * M_PI * kendall_corr(v{j,1}, v{j,i+1}));
+        theta{j,i} = sin(0.5 * pi * kendall_corr(v{j,1}, v{j,i+1}));
         h_functions{j,i} = str2func('h_gaussian');
         h_inverses{j,i} = str2func('hinv_gaussian');
       else
@@ -90,7 +90,7 @@ function ordering = ordering_greedy(population)
   % Select an ordering of the variables using a greedy algorithm.
 
   n = size(population, 2);
-  taus = abs(corr(population, 'type', 'Kendall'));
+  taus = abs(kendall_corr(population, population));
   taus = triu(taus) + diag(repmat(-Inf, 1, n)) + tril(taus);
   
   [tk, k] = max(taus(:));

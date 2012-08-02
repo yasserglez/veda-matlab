@@ -66,7 +66,7 @@ function [theta, h_functions, h_inverses] = estimate_parameters(params, uniform_
   
   for i = 1:n-1
     if kendall_corr_test(v{1,i}, v{1,i+1}, cor_test_level)
-      theta{1,i} = sin(0.5 * M_PI * kendall_corr(v{1,i}, v{1,i+1}));
+      theta{1,i} = sin(0.5 * pi * kendall_corr(v{1,i}, v{1,i+1}));
       h_functions{1,i} = str2func('h_gaussian');
       h_inverses{1,i} = str2func('hinv_gaussian');
     else
@@ -86,7 +86,7 @@ function [theta, h_functions, h_inverses] = estimate_parameters(params, uniform_
   for j = 2:vine_trees
     for i = 1:n-j
       if kendall_corr_test(v{j,2*i-1}, v{j,2*i}, cor_test_level)
-        theta{j,i} = sin(0.5 * M_PI * kendall_corr(v{j,2*i-1}, v{j,2*i}));
+        theta{j,i} = sin(0.5 * pi * kendall_corr(v{j,2*i-1}, v{j,2*i}));
         h_functions{j,i} = str2func('h_gaussian');
         h_inverses{j,i} = str2func('hinv_gaussian');
       else
@@ -117,7 +117,7 @@ function ordering = ordering_greedy(population)
   % Select an ordering of the variables using a greedy algorithm.
 
   n = size(population, 2);
-  taus = abs(corr(population, 'type', 'Kendall'));
+  taus = abs(kendall_corr(population, population));
   taus = triu(taus) + diag(repmat(-Inf, 1, n)) + tril(taus);
 
   [tk, k] = max(taus(:));
