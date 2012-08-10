@@ -28,7 +28,7 @@ variables. To simplify the construction, it is possible to apply a truncation
 strategy. If a vine is truncated at a given tree, all the copulas in the rest of
 the trees are assumed to be product copulas.
 
-Consider using the copulaedas R package (González-Fernández and Soto 2012) which
+Consider using the copulaedas R package (González-Fernández and Soto 2011) which
 provides a more flexible and up-to-date implementation of these algorithms.
 
 References:
@@ -40,7 +40,7 @@ References:
    Mathematics and Artificial Intelligence, 32(1), 245--268.
 3. González-Fernández Y (2011). Algoritmos con estimación de distribuciones 
    basados en cópulas y vines. Bachelor thesis, University of Havana, Cuba.
-4. González-Fernández Y, Soto M (2012). copulaedas: Estimation of Distribution
+4. González-Fernández Y, Soto M (2011). copulaedas: Estimation of Distribution
    Algorithms Based on Copulas. R package version 1.1.0,
    URL http://CRAN.R-project.org/package=copulaedas.
 5. Joe H (1996). "Families of m-variate Distributions with Given Margins and
